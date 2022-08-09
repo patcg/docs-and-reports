@@ -184,7 +184,7 @@ We assume the existence of attackers on the network links between various partie
 3. Timing of messages should be carefully considered as not to leak anything beyond what the attacker would learn absent the proposed API.
 
 
-## 2. First Parties, Embedded Parties and Delegated Parties
+## 2. First Parties, Embedded Parties, and Delegated Parties
 
 The use cases considered by the PATWG involve combining data across two (or possibly more) distinct first parties. (Use cases that involve a single first party should be supported by first party storage access/cookies, and out of scope for the PATWG.) Quite often this involves either one first party being embedded in the other first party’s site/app, or (possibly more commonly) an additional “delegated party” being embedded on both first parties’ sites/apps.
 
@@ -213,7 +213,7 @@ A differentially private output limits the inference that can be made from two q
 1. Sensitivity of the function (the amount the aggregate can be influenced by a single input) needs to be bounded, and
 2. Random noise, proportional to the sensitivity needs to be added.
 
-Differential privacy is parameterized by ε, which measures the amount of individual differential privacy leakage, and the noise is inversely proportional to \epsilon.
+Differential privacy is parameterized by ε, which measures the amount of individual differential privacy leakage, and the noise is inversely proportional to ε.
 
 
 #### 3.1.1 Privacy Budgeting
@@ -230,7 +230,7 @@ When managing a privacy budget, that budget is assigned to some party who can us
 
 ### 3.3 Privacy Parameters
 
-This results in three parameters which need to reach consensus in the PATWG:
+This results in four parameters which need to reach consensus in the PATWG:
 
 
 
