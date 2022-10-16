@@ -10,16 +10,18 @@ This document is currently a **draft**, submitted to the PATCG (and eventually t
 
 In this document, we outline the security considerations for proposed purpose-constrained APIs for the web platform (that is, within browsers, mobileOSs, and other user-agents) specified by the Private Advertising Technologies Working Group (PATWG).
 
-We assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some (proposal specific) subset of aggregators.
+Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation environment would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function to the specified parties. This is commonly used to perform aggregation over inputs which, individually, must not be revealed. It is also often used to then apply differentially private noise to those aggregates.
+
+Private computation has various constructions, each with different assumptions. The two primary forms considered by existing proposals are _multi-party computation_ (MPC) and _trusted execution environments_ (TEEs.) MPC relies on distinct parties, or _aggregators_, who perform a cryptographic protocol, while TEEs rely on specialized hardware that provides isolation for computation on sensitive data.
+
+For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
 
 In the presence of this adversary, APIs should aim to achieve the following goals:
-
-
 
 1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
 2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
-Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties.
+Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. Moreover, this threat model does not address the specific threats to different configurations of aggregators participating in an MPC, nor the threats to TEEs. These configurations enable varying depth of defense against such an attacker, and are instead left to web platform vendors to decide what level is appropriate for their APIs and users. This is explored further in [Section 4: Private Computation Configurations](#4-private-computation-configurations).
 
 
 ## 1. Threat Model
@@ -29,18 +31,13 @@ In this section, we enumerate the potential actors that may participate in a pro
 
 ### 1.1. Client/User
 
-
 #### 1.1.1. Assets
-
-
 
 1. Original inputs provided to client APIs. Clients expose these APIs to other actors below, which can modify the client’s assets, but should not reveal them.
 2. Unencrypted input shares, for systems which rely on secret sharing among aggregators.
 
 
 #### 1.1.2. Capabilities
-
-
 
 1. Individuals can reveal their own input and compromise their own privacy.
 2. Clients (user agent software) can compromise privacy by leaking their assets (beyond specified aggregators, when used.)
@@ -49,8 +46,6 @@ In this section, we enumerate the potential actors that may participate in a pro
 
 #### 1.1.3. Mitigations
 
-
-
 1. The client/user may be able to provide certain forms of validation to mitigate either individual client’s or coalitions of clients' ability to compromise correctness. These include (but are not limited to):
     1. Bound checking via zero-knowledge proof that an oblivious representation of a value lies within certain bounds. This would provide the client/user the ability to lie or misrepresent a value, but constrains that ability.
     2. Anonymous assertion via tokens that provide some form of authorization that can be tied to a specific input. Such tokens may be provided by other parties, to assert the authenticity of a report, or reflect that a user has been recognized as an authenticated individual user in another context. These tokens must be anonymous, meaning that it cannot be attributed to a specific user (e.g. by using a cryptographic technique like blind signatures.)
@@ -58,10 +53,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 
 ### 1.2. First Party Site/App
 
-
 #### 1.2.1. Assets
-
-
 
 1. Unencrypted inputs into the proposed API.
 2. First party context (e.g. first party cookies / information in first party storage.)
@@ -72,15 +64,11 @@ In this section, we enumerate the potential actors that may participate in a pro
 
 #### 1.2.2. Capabilities
 
-
-
 1. First parties can modify client assets through the proposed APIs.
 2. First parties can choose which encrypted outputs from the proposed API are provided to aggregators.
 
 
 #### 1.2.3. Mitigations
-
-
 
 1. Modification of client assets should be limited by the API interface to only allow for intended modifications.
 2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent
@@ -99,23 +87,17 @@ See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-
 
 #### 1.3.1. Assets
 
-
-
 1. All the same assets as First Parties ([section 1.2.1](#121-Assets))
     1. Exception that 1.2.1.2 would be partitioned delegated party context.
 
 
 #### 1.3.2. Capabilities
 
-
-
 1. The same capabilities as First Parties ([section 1.2.2](#122-Capabilities))
 2. Delegated parties can modify client assets through the proposed APIs, which may include overwriting/modifying data provided by the first party or other delegated parties.
 
 
 #### 1.3.3. Mitigations
-
-
 
 1. The same mitigations as Third Parties ([section 1.2.3](#123-Mitigations))
 2. The client should prevent the ability of a delegated party to overwrite/modify data provided by the first party or other delegated parties. If this is not possible, the client should allow the first party to control and limit a delegated party's ability in this manner. (See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-Parties-Embedded-Parties-and-Delegated-Parties) for more details.)
@@ -128,8 +110,6 @@ An aggregator is an individual party which participates in an aggregation protoc
 
 #### 1.4.1. Assets
 
-
-
 1. Unencrypted individual share.
 2. All the assets from first and third parties.
 3. Shares of the output of the aggregation protocol.
@@ -138,8 +118,6 @@ An aggregator is an individual party which participates in an aggregation protoc
 
 #### 1.4.2. Capabilities
 
-
-
 1. Aggregators may defeat correctness by emitting bogus output shares.
 2. Aggregators (who collude with a first or third party) may learn information about the clients/users which contribute to the protocol.
 3. Aggregators may compromise the availability of the system by refusing to participate in the protocol.
@@ -147,8 +125,6 @@ An aggregator is an individual party which participates in an aggregation protoc
 
 
 #### 1.4.3. Mitigations
-
-
 
 1. The secret sharing scheme used to provide inputs to the aggregators must ensure privacy as long as the (proposal specific) subset of aggregators do not reveal their shares.
 2. The aggregation protocol should provide robust analysis that it is in fact a differentially private function (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization).)
@@ -159,6 +135,8 @@ An aggregator is an individual party which participates in an aggregation protoc
 
 If enough aggregators (beyond the proposal specific subset) collude e.g. by sharing unencrypted input shares), then none of the properties of the system hold. Such scenarios are outside the threat mode.
 
+However, we do assume that an attacker can always control at least one aggregator (i.e. there are no perfectly trusted aggregators.)
+
 
 ### 1.6. Attacker on the network
 
@@ -167,8 +145,6 @@ We assume the existence of attackers on the network links between various partie
 
 #### 1.6.1. Capabilities
 
-
-
 1. Observation of network traffic. Attackers may observe messages exchanged between parties exchanged at the IP layer.
     1. Time of transmission by clients could reveal information about user activity.
 2. Observation of message size could allow the attacker to learn how much input is being submitted by a specific user.
@@ -176,8 +152,6 @@ We assume the existence of attackers on the network links between various partie
 
 
 #### 1.6.2. Mitigations
-
-
 
 1. All messages exchanged between parties should be encrypted / use TLS / use HTTPS.
 2. All messages between aggregators and to/from first/third parties should be mutually authenticated to prevent impersonation.
@@ -230,11 +204,53 @@ When managing a privacy budget, that budget is assigned to some party who can us
 
 ### 3.3 Privacy Parameters
 
-This results in four parameters which need to reach consensus in the PATWG:
+This results in four parameters:
 
-
-
-1. _Aggregation minimum threshold_: the number of clients/users that need to be included in a given aggregation.
+1. _Unit of privacy_: The set of parties used to manage the privacy budget.
 2. _Epoch_: The amount of time over which a differential privacy budget should be managed.
 3. ε: The differential privacy parameter which measures the amount of individual differential information leakage allowed in each epoch.
-1. _Unit of privacy_: The set of parties used to manage the privacy budget.
+4. _Aggregation minimum threshold_: the number of clients/users that need to be included in a given aggregation.
+
+We can divide these parameters into two groups: parameters which should be part of the standard (and thus require consensus) and parameters which can be configured by the web platform vendor. The first two parameters, _unit of privacy_, and _epoch_ should likely be part of the standard. However, the other two parameters, ε and _aggregation minimum threshold_ could differ across web platform vendors without compromising interoperability.
+
+Let's first address, ε. Suppose that we have _Browser A_ and _Mobile OS B_ which, respectively, decide that the appropriate budget is "1 unit/epoch" and "5 unit/epoch". Luckily, in the worst case, privacy budgets are additive, and thus can be split into smaller pieces. A user of this API could then decide to use "1 unit/epoch" on the API from both _Browser A_ and _Mobile OS B_, and then continue to use the remaining "4 unit/epoch" on the API from _Mobile OS B_.
+
+Secondly, let's address _aggregation minimum threshold_. Suppose that the same _Browser A_ and _Mobile OS B_ have also, respectively, decided that the _aggregation minimum threshold_ should be "X people" and "2X people". Because this is a minimum, when using the API from both, the minimum can be set to 2X, and satisfy both constraints. However, when using the API from only _Browser A_, the minimum could be reduced to X.
+
+## 4. Private Computation Configurations
+
+Many of these proposals aim to leverage the idea of _private computation_, touched on briefly in the introduction. In it's ideal form, a private computation environment would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. This is commonly used to perform aggregation over inputs which, individually, must not be revealed. It is also often used to then apply differentially private noise to those aggregates.
+
+There are currently two proposed constructions of a private computation environment: _multi-party computation_ (MPC) and _trusted execution environments_ (TEEs). The following two subsections outline how these can be to create a private computation environment, how they fit into the threat model, and the assumptions required to achieve our goal of assuring that the inputs are not revealed.
+
+### 4.1 Multi-party Computation (MPC)
+
+Multi-party computation is a cryptographic protocol in which distinct parties can collectively operate on data which remains oblivious to any individual party throughout the computation, but allows for joint evaluation of a predefined function.
+
+These protocols typically work with data which is _secret shared_. For example, a three way secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious even when a party learns all by one s<sub>i</sub>. Note that secret shares can also be generated using XOR with random byte strings.
+
+In terms of our threat model, these parties are aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a maliciously secure, honest two out of three majority MPC.
+
+Given these aggregators, a _client/user_ is able to generate a secret sharing of their input data, and then securely communicate one secret share to each aggregator. This allows the aggregators to then perform the MPC protocol to compute the predefined function. The _client/user_ is assuming that an attacker cannot control enough aggregators to violate that protocol, which implies that they only perform the expected function.
+
+### 4.2 Trusted Execution Environments (TEEs)
+
+Trusted execution environments are specialized hardware where encrypted data can be sent "in" to an enclave where it is decrypted and operated on, but cannot be otherwise accessed. It also produces an "attestation" that provides a means of verifying that the code run on that data is the code that was intended. Different hardware manufacturers offer different types of TEEs, and there are various assumptions which need to be made about the manufacturer, hardware operator, and other tenants on the hardware in order to achieve our ideal of input data remaining oblivious. There are documented attacks for many of these types of hardware, and while we don't expect all web platform vendors to support this construction, some vendors have expressed comfort with the required assumptions.
+
+In order to utilize a TEE to achieve private computation, we need two properties. First, the data must only be able to be decrypted within the TEE, and second, we need to assure that the TEE only executes code which evaluates the predefined function.
+
+In a very simplified form, we could imagine there is one TEE which is used by every _first party_/_delegated party_ to run the predefined function. In this case, the _user/client_ could encrypt their data with the public key of the TEE. However, this ignores assuring the code running is that that's intended. The TEE produces an attestation of the code it's running, however the _client/user_ needs that attestation to be verified before their input data is decrypted.
+
+This can be achieved by utilizing an aggregator who verifies the TEE attestation on behalf of the _client/user_. In this case, the _client/user_ encrypts the data towards the aggregator, and the aggregator provides the decryption key into the TEE if and only if the attestation verifies the TEE is only running the expected code. This still has one problem, however, as we assume that our attacker can compromise at least one aggregator.
+
+We can extend this one step further, by utilizing not one, but multiple aggregators. Each aggregator can hold part of a _threshold key_, which allows data to be encrypted such that it requires all (or a predefined subset) of keys to decrypt. Each aggregator verifies the attestation and provides their decryption key into the TEE if and only if the attestation verifies the TEE is only running the expected code. Thus, only the TEE is ever able to decrypt the data, so long as the attacker is only able to control a subset of aggregators.
+
+### 4.3 Abstracting Private Computation
+
+Both of these constructions rely on a set of aggregators, where we assume that an attacker is unable to control all aggregators. Let a specific set of aggregators be called an aggregator network. Each web platform vendor will need to make a judgment as to if it's reasonable to assume that an aggregator network can be _trusted_, e.g. that attackers would be unable to compromise all aggregators within that specific aggregator network.
+
+To make this judgment, web platform vendors are likely to consider various properties about helper party networks such as diversity in ownership of the company/organization operating the aggregators, diversity in cloud provider (if relevant) used by the aggregators, diversity in jurisdictions in which the aggregators operate, etc.
+
+It's unlikely that all web vendors will arrive at the same decision as to which aggregator networks can be assumed to be trusted. Our aim, however, is for many such aggregator networks to exist that are trusted by most web platforms, allowing for choice and competition for the first/delegated parties that leverage these APIs. Moreover, as we may have web platform vendors providing different privacy budgets (see section [3.3 Privacy Parameters](#33-privacy-parameters),) the first/delegated parties may use multiple aggregator networks to utilize those different budgets.
+
+Just as web vendors unlikely to fully agree on the sets of trusted aggregator network, they may also reach different conclusions as to which constructions of private computation can be utilized. If we consider an aggregator network to be the pairing of both the aggregator parties and the private computation construction, it's reasonably straight forward to for the standard to be unopinionated about the construction. Instead, individual web platform vendors can include the private computation construction when considering which aggregator networks are trusted.
