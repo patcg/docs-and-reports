@@ -12,7 +12,13 @@ In this document, we outline the security considerations for proposed purpose-co
 
 Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. Private computation can be used to perform aggregation over inputs which, individually, must not be revealed.
 
-Private computation has various constructions, each with different assumptions. The two primary forms considered by existing proposals are _multi-party computation_ (MPC) and _trusted execution environments_ (TEEs.) MPC relies on distinct parties, or _aggregators_, who perform a cryptographic protocol, while TEEs rely on specialized hardware that provides isolation for computation on sensitive data.
+Private computation can be instantiated using several technologies:
+
+* Multi-party computation (MPC) distributes information between multiple independent entities using secret sharing.
+* A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
+* Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
+
+Though the implementation details differ for each technology, ultimately they all rely on finding two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
 
 For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
 
@@ -135,7 +141,7 @@ An aggregator is an individual party which participates in an aggregation protoc
 
 If enough aggregators (beyond the proposal specific subset) collude e.g. by sharing unencrypted input shares), then none of the properties of the system hold. Such scenarios are outside the threat mode.
 
-However, we do assume that an attacker can always control at least one aggregator (i.e. there are no perfectly trusted aggregators.)
+However, we do assume that an attacker can always control at least one aggregator (i.e., there are no perfectly trusted aggregators.)
 
 
 ### 1.6. Attacker on the network
@@ -232,6 +238,8 @@ Multi-party computation is a cryptographic protocol in which distinct parties ca
 These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1 - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, Shamir's secret sharing uses polynomial interpolation.
 
 In terms of our threat model, these parties are aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a maliciously secure, honest two out of three majority MPC.
+
+Another security model for MPC is _honest but curious_, where the input data remains oblivious so long as aggregators do not deviate from the protocol. Since we are assuming that an attacker can control some subset of the aggregators, it would be able to deviate from the protocol, and thus the _honest but curious_ is not suitable.
 
 Given these aggregators, a _client/user_ is able to generate a secret sharing of their input data, and then securely communicate one secret share to each aggregator. This allows the aggregators to then perform the MPC protocol to compute the predefined function. The _client/user_ trusts that an attacker cannot control enough aggregators to violate that protocol.
 
