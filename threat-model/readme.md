@@ -27,7 +27,7 @@ In the presence of this adversary, APIs should aim to achieve the following goal
 1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
 2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
-Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation option provides different options for defense against attacks.  Web platform vendors can decide what configurations produce adequate safeguards for their APIs and users. This is explored further in [Section 4: Private Computation Configurations](#4-private-computation-configurations).
+Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation option provides different options for defense against attacks.  Web platform vendors can decide what configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
 
 ## 1. Threat Model
@@ -260,8 +260,6 @@ Two sites/apps are distinct first parties ([cross-site](https://tess.oconnor.cx/
 
 This comes with certain considerations that need to be made, particularly because a first party may embed multiple delegated parties into their site/app. As such, proposed APIs must take into consideration interactions between delegated parties, such as (but not limited to):
 
-
-
 1. The ability for one delegated party to corrupt the results of another delegated party.
 2. The ability for one delegate party to disable functionality of another delegated party, such as exhausting various limits put in place.
 3. The ability to delegate to multiple parties and bypass privacy budget restrictions
@@ -275,8 +273,6 @@ Any output from the proposed APIs must avoid leaking information about any indiv
 ### 3.1 Differential Privacy
 
 A differentially private output limits the inference that can be made from two queries which differ by an individual input. For example, calculating typical aggregation functions like _sum_ and _mean_ across two sets which differ by a single element will tell you the exact value of that element (making those functions entirely non-differentially private.) Making a function differentially private typically requires two factors:
-
-
 
 1. Sensitivity of the function (the amount the aggregate can be influenced by a single input) needs to be bounded, and
 2. Random noise, proportional to the sensitivity needs to be added.
@@ -325,7 +321,7 @@ Multi-party computation is a cryptographic protocol in which distinct parties ca
 
 These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1 - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, Shamir's secret sharing uses polynomial interpolation.
 
-In terms of our threat model, these parties are aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a maliciously secure, honest two out of three majority MPC.
+In terms of our threat model, MPC uses a helper party network composed of aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a maliciously secure, honest two out of three majority MPC.
 
 Another security model for MPC is _honest but curious_, where the input data remains oblivious so long as aggregators do not deviate from the protocol. Since we are assuming that an attacker can control some subset of the aggregators, it would be able to deviate from the protocol, and thus the _honest but curious_ is not suitable.
 
@@ -343,18 +339,18 @@ Different hardware manufacturers offer different types of TEEs, and there are va
 
 In order to utilize a TEE to achieve private computation, we need two properties. First, the data must only be able to be decrypted within the TEE, and second, we need to assure that the TEE only executes code which evaluates the predefined function.
 
-In a very simplified form, we could imagine there is one TEE which is used by every _first party_/_delegated party_ to run the predefined function. In this case, the _user/client_ could encrypt their data with the public key of the TEE. However, this ignores assuring the code running is that that's intended. The TEE produces an attestation of the code it's running, however the _client/user_ needs that attestation to be verified before their input data is decrypted.
+The currently proposed system utilizes a helper party network composed of coordinators. This helper party network participate in a key exchange protocol to generate a _threshold key pair_, with a public key for encryption and several partial private keys such that each coordinator has a single partial private key, and all (or a predefined subset) are required for decryption. This allows the _client/user_ to encrypt the data towards the helper party network.
 
-This can be achieved by utilizing an aggregator who verifies the TEE attestation on behalf of the _client/user_. In this case, the _client/user_ encrypts the data towards the aggregator, and the aggregator provides the decryption key into the TEE if and only if the attestation verifies the TEE is only running the expected code. This still has one problem, however, as we assume that our attacker can compromise at least one aggregator.
+When a TEE is instantiated to perform an aggregation, each coordinator in the helper party network can validate an attestation from the TEE and provide their partial private key if and only if the attestation verifies that the TEE is only running the expected code. Thus, only the TEE is ever able to decrypt the data, so long as the attacker is only able to control a subset of coordinators in the helper party network.
 
-We can extend this one step further, by utilizing not one, but multiple aggregators. Each aggregator can hold part of a _threshold key_, which allows data to be encrypted such that it requires all (or a predefined subset) of keys to decrypt. Each aggregator verifies the attestation and provides their decryption key into the TEE if and only if the attestation verifies the TEE is only running the expected code. Thus, only the TEE is ever able to decrypt the data, so long as the attacker is only able to control a subset of aggregators.
+Note that in [section 1.7. Helper party collusion](#17-Helper-party-collusion), we assume that at least one helper party in a network can be controlled by the attacker, thus requiring at least two coordinators in the helper party network.
 
-### 4.3 Abstracting Private Computation
+### 4.3 Layering Private Computation
 
-Both of these constructions rely on a set of aggregators, where we assume that an attacker is unable to control all aggregators. Let a specific set of aggregators be called an aggregator network. Each web platform vendor will need to make a judgment as to if it's reasonable to assume that an aggregator network can be _trusted_.  That is, that attackers would be unable to compromise any subset of the aggregators within that specific aggregator network such that the privacy guarantees of the system could not be met.
+Both of these constructions rely on helper party networks, where we assume that an attacker is unable to control all parties within a given helper party network. Each web platform vendor will need to make a judgment as to if it's reasonable to assume that an helper party network can be _trusted_.  That is, that attackers would be unable to compromise a sufficient subset of the helper parties within that specific helper party network such that the privacy guarantees of the system could not be met.
 
-To make this judgment, web platform vendors are likely to consider various properties about helper party networks such as diversity in ownership of the company/organization operating the aggregators, diversity in cloud provider (if relevant) used by the aggregators, diversity in jurisdictions in which the aggregators operate, etc.
+To make this judgment, web platform vendors are likely to consider various properties about helper party networks such as diversity in ownership of the company/organization operating the helper parties, diversity in cloud provider (if relevant) used by the helper parties, diversity in jurisdictions in which the helper parties, cloud providers, and TEE operators operate, etc. The specific instantiation of private computation will also be a factor in this decision.
 
-It's unlikely that all web vendors will arrive at the same decision as to which aggregator networks can be assumed to be trusted. Our aim, however, is for many such aggregator networks to exist that are trusted by most web platforms, allowing for choice and competition for the first/delegated parties that leverage these APIs. Moreover, as we may have web platform vendors providing different privacy budgets (see section [3.3 Privacy Parameters](#33-privacy-parameters),) the first/delegated parties may use multiple aggregator networks to utilize those different budgets.
+Arbitrary helper party networks will not be able to automatically participate in these protocols, as web platform vendors will need to provide some form of authorization. As such, our goal is to reach consensus on a core set of methods and helper party networks so that first/delegated parties can get uniform service across web platform vendors.
 
-Just as web vendors unlikely to fully agree on the sets of trusted aggregator network, they may also reach different conclusions as to which constructions of private computation can be utilized. If we consider an aggregator network to be the pairing of both the aggregator parties and the private computation construction, it's reasonably straight forward to for the standard to be unopinionated about the construction. Instead, individual web platform vendors can include the private computation construction when considering which aggregator networks are trusted.
+Beyond this core set of methods and operators, we aim to make these APIs interoperable such that individual web platform vendors may offer increments over that, by authorizing a large set of helper party networks, certain instantiations of private computation, and extended privacy budgets. This would allow first/delegated parties to layer their usage of these APIs, utilizing that core set of methods and helper party networks for uniform service, and layering on incremental service where it's available.
