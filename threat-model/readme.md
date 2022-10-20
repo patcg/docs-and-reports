@@ -109,20 +109,29 @@ See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-
 2. The client should prevent the ability of a delegated party to overwrite/modify data provided by the first party or other delegated parties. If this is not possible, the client should allow the first party to control and limit a delegated party's ability in this manner. (See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-Parties-Embedded-Parties-and-Delegated-Parties) for more details.)
 
 
-### 1.4. Aggregator
+### 1.4 Helper Parties and Helper Party Networks
 
-An aggregator is an individual party which participates in an aggregation protocol. We assume that some (proposal specific) subset of the aggregators act honestly and do not collude with other aggregators or any other parties. Here we outline assets and capabilities assuming that an aggregator colludes up to, but not exceeding, that threshold.
+Helper parties are a class of party (i.e., companies, organizations) who participate in a protocol in order to instantiate a private computation system. There are currently two types of helper parties proposed, _aggregators_ and _coordinators_. We outline the properties on each type directly (as opposed to on the class itself.)
+
+We define a _helper party network_ as a collection of specific parties who are acting as helper parties. We assume that an attacker can control some (proposal specific) subset of the helper party network, and that the remaining helper parties act honestly (e.g., they do not collude with other helper parties or any other parties.) Here we outline assets and capabilities in the presence of this attacker.
+
+All parties in a helper party network should be known a priori and web platform vendors should be able to evaluate risk of an attacker that is more powerful than our assumption, e.g., the attacker is able to control more than the (protocol specific) subset of helper parties in the network.
 
 
-#### 1.4.1. Assets
+### 1.5. Aggregator Helper Party
 
-1. Unencrypted individual share.
+An aggregator is type of helper party which participates in a helper party network to instantiate an MPC based private computation system. Aggregators receive secret shares of the input data and interact with the other aggregators in the helper party network to perform the aggregation. See [section 4.1 Multi-pary Computation](#41-Multi-party-Computation) for more details.
+
+
+#### 1.5.1. Assets
+
+1. Unencrypted individual share of a secret share.
 2. All the assets from first and third parties.
 3. Shares of the output of the aggregation protocol.
-4. Identity of other aggregators.
+4. Identity of other aggregators in the helper party network.
 
 
-#### 1.4.2. Capabilities
+#### 1.5.2. Capabilities
 
 1. Aggregators may defeat correctness by emitting bogus output shares.
 2. Aggregators (who collude with a first or third party) may learn information about the clients/users which contribute to the protocol.
@@ -130,26 +139,105 @@ An aggregator is an individual party which participates in an aggregation protoc
 4. Aggregators can count the total number of inputs to the system, and, depending on the protocol, counts of shares at any point during the protocol.
 
 
-#### 1.4.3. Mitigations
+#### 1.5.3. Mitigations
 
-1. The secret sharing scheme used to provide inputs to the aggregators must ensure privacy as long as the (proposal specific) subset of aggregators do not reveal their shares.
+1. The secret sharing scheme used to provide inputs to the aggregators must ensure privacy in the presence of the attacker.
 2. The aggregation protocol should provide robust analysis that it is in fact a differentially private function (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization).)
-3. Bogus inputs can be generated that encode “null” or “noop” shares, designed to not affect the aggregation protocol, but can mask the total number of true inputs.
+3. Bogus inputs can be generated that encode “null” or “noop” shares, designed mask the total number of true inputs without compromising correctness.
 
 
-### 1.5. Aggregator collusion
+### 1.6 Coordinator Helper Party
 
-If enough aggregators (beyond the proposal specific subset) collude e.g. by sharing unencrypted input shares), then none of the properties of the system hold. Such scenarios are outside the threat mode.
-
-However, we do assume that an attacker can always control at least one aggregator (i.e., there are no perfectly trusted aggregators.)
+An coordinator is type of helper party which participates in a helper party network to instantiate an TEE based private computation system. Coordinators hold a partial decryption key for the input data, which is provided into a specific instance of a TEE if and only if an attestation verifies the TEE is running in the expect state. See [section 4.2 Trusted Execution Environments](#42-Trusted-Execution-Environments)
 
 
-### 1.6. Attacker on the network
+#### 1.6.1 Assets
+
+1. A partial decryption key used to encrypt the input data.
+2. All the assets of from the first and third parties.
+3. Identity of the other coordinators.
+
+#### 1.6.2 Capabilities
+
+1. Coordinators may compromise the availability of the system by refusing to validate the attestation and refusing to supply their key share.
+
+
+#### 1.6.3 Mitigations
+
+1. Helper party networks with a larger number of coordinators could utilize a threshold key which requires less than all key shares to decrypt the data, preventing an individual coordinator from compromising availability. This comes at the cost of more complicated analysis about the ability of an attacker to control different subsets of that helper party network.
+
+
+### 1.7. Helper party collusion
+
+If enough helper parties collude (beyond the proposal specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
+
+However, we do assume that an attacker can always control at least one helper party (i.e., there are no perfectly trusted helper parties.)
+
+
+### 1.8 Cloud Providers for Helper Parties
+
+Helper parties may run either on physical machines owned by directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
+
+
+#### 1.8.1 Assets
+
+1. All the assets of the helper party(ies) utilizing the cloud provider.
+2. All the assets of from the first and third parties.
+3. Identity of the helper parties.
+
+#### 1.8.2 Capabilities
+
+1. Cloud providers have all the capabilities of the helper parties utilizing that cloud provider.
+2. If a sufficient number of helper parties utilize a common cloud provider,
+    a. for aggregator networks, it can reconstruct the client/user assets;
+    b. for coordinator networks, it can reconstruct the decryption key.
+
+
+#### 1.8.3 Mitigations
+
+1. Helper parties networks should utilize sufficiently distinct cloud providers beyond the proposal specific subset which the attacker is assumed to control.
+
+
+### 1.9 Operators of TEEs
+
+As a piece of hardware, TEEs will have an operator with access to the machine. Most commonly, this will be a cloud provider. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+
+#### 1.9.1 Assets
+TODO
+
+
+#### 1.9.2 Capabilities
+TODO
+
+
+#### 1.9.2 Mitigations
+TODO
+
+
+### 1.10 TEE Manufacturers
+
+TEEs can provide "attestation" which verifies that the TEE is running in the expected state and running the expected code. These attestations are typically produced with an asymmetric key, where the private key is physically embedded into the TEE, and the public key is published via a system similar to a certificate authority.
+
+#### 1.9.1 Assets
+
+1. Private keys embedded in TEEs and their corresponding public keys.
+
+#### 1.9.2 Capabilities
+
+1. If an attacker controls both the cloud provider and the TEE manufacturer, decrypt all data within the TEE.
+
+
+#### 1.9.2 Mitigations
+
+1. Pick a configuration of TEE manufacturer and cloud operator where it can be assumed that an attacker cannot control both.
+
+
+### 1.11. Attacker on the network
 
 We assume the existence of attackers on the network links between various parties.
 
 
-#### 1.6.1. Capabilities
+#### 1.11.1. Capabilities
 
 1. Observation of network traffic. Attackers may observe messages exchanged between parties exchanged at the IP layer.
     1. Time of transmission by clients could reveal information about user activity.
@@ -157,7 +245,7 @@ We assume the existence of attackers on the network links between various partie
 3. Tampering with network traffic. Attackers may drop messages or inject new messages into communication between parties.
 
 
-#### 1.6.2. Mitigations
+#### 1.11.2. Mitigations
 
 1. All messages exchanged between parties should be encrypted / use TLS / use HTTPS.
 2. All messages between aggregators and to/from first/third parties should be mutually authenticated to prevent impersonation.
@@ -247,7 +335,7 @@ If the protocol is faithfully executed, the aggregate result can then be reporte
 
 This threat model does not require that the MPC protocol provide safeguards against an aggregator spoiling the answers from the system. Though a spoiled answer is possible in many protocols, the primary threat that a compromised aggregator presents is to the privacy of _clients/users_. We assume that there is some contractual relationship between those requesting aggregation and the entities that perform that aggregation such that the aggregators lack significant incentive to spoil results.
 
-### 4.2 Trusted Execution Environments (TEEs)
+### 4.2 Trusted Execution Environments
 
 Trusted execution environments are specialized hardware where encrypted data can be sent "in" to an enclave where it is decrypted and operated on, but cannot be otherwise accessed. A TEE can produce an "attestation" that acts as a claim - backed by the vendor of the TEE - that only specific code is actively running.
 
