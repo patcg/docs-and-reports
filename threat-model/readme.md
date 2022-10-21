@@ -18,7 +18,7 @@ Private computation can be instantiated using several technologies:
 * A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
 * Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
 
-Though the implementation details differ for each technology, ultimately they all rely on finding two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
+Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
 
 For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
 
@@ -27,7 +27,7 @@ In the presence of this adversary, APIs should aim to achieve the following goal
 1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
 2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
-Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation option provides different options for defense against attacks.  Web platform vendors can decide what configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
+Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation instantiation provides different options for defense against attacks.  Web platform vendors can decide which configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
 
 ## 1. Threat Model
@@ -113,7 +113,7 @@ See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-
 
 Helper parties are a class of party (i.e., companies, organizations) who participate in a protocol in order to instantiate a private computation system. There are currently two types of helper parties proposed, _aggregators_ and _coordinators_. We outline the properties on each type directly (as opposed to on the class itself.)
 
-We define a _helper party network_ as a collection of specific parties who are acting as helper parties. We assume that an attacker can control some (proposal specific) subset of the helper party network, and that the remaining helper parties act honestly (e.g., they do not collude with other helper parties or any other parties.) Here we outline assets and capabilities in the presence of this attacker.
+We define a _helper party network_ as a group of helper parties. We assume that an attacker can control some (proposal specific) subset of the helper parties that participate in helper party network, but that the remaining helper parties act honestly (e.g., they do not collude with other helper parties or any other parties.) Here we outline assets and capabilities in the presence of this attacker.
 
 All parties in a helper party network should be known a priori and web platform vendors should be able to evaluate risk of an attacker that is more powerful than our assumption, e.g., the attacker is able to control more than the (protocol specific) subset of helper parties in the network.
 
@@ -143,7 +143,7 @@ An aggregator is type of helper party which participates in a helper party netwo
 
 1. The secret sharing scheme used to provide inputs to the aggregators must ensure privacy in the presence of the attacker.
 2. The aggregation protocol should provide robust analysis that it is in fact a differentially private function (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization).)
-3. Bogus inputs can be generated that encode “null” or “noop” shares, designed mask the total number of true inputs without compromising correctness.
+3. Bogus inputs can be generated that encode “null” or “noop” shares, which could be designed to mask the total number of true inputs without compromising correctness.
 
 
 ### 1.6 Coordinator Helper Party
@@ -171,7 +171,7 @@ An coordinator is type of helper party which participates in a helper party netw
 
 If enough helper parties collude (beyond the proposal specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
 
-However, we do assume that an attacker can always control at least one helper party (i.e., there are no perfectly trusted helper parties.)
+However, we do assume that an attacker can always control at least one helper party. That is, there can be no perfectly trusted helper parties.
 
 
 ### 1.8 Cloud Providers for Helper Parties
@@ -181,7 +181,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 
 #### 1.8.1 Assets
 
-1. All the assets of the helper party(ies) utilizing the cloud provider.
+1. All the assets of the helper party (or parties) using the cloud provider.
 2. All the assets of from the first and third parties.
 3. Identity of the helper parties.
 
@@ -305,13 +305,13 @@ We can divide these parameters into two groups: parameters which should be part 
 
 Let's first address, ε. Suppose that we have _Browser A_ and _Mobile OS B_ which, respectively, decide that the appropriate budget is "1 unit/epoch" and "5 unit/epoch". Luckily, in the worst case, privacy budgets are additive, and thus can be split into smaller pieces. A user of this API could then decide to use "1 unit/epoch" on the API from both _Browser A_ and _Mobile OS B_, and then continue to use the remaining "4 unit/epoch" on the API from _Mobile OS B_.
 
-This might be achieved by using a system that distributes information from both Browser A and Mobile OS B to a private computation entity that is configured to consume 1 unit per epoch. Information from Mobile OS B is additionally distributed to another entity that is configured to consume the remaining 4 units. As a practical matter, the two logical private computation entities here could be operated by the same organizations, but they would use different configurations. For instance, each configuration might use different keying material. In this case, Browser A is able to limit information release to 1 unit per epoch by choosing where information can be sent.
+This might be achieved by using a system that distributes information from both Browser A and Mobile OS B to a private computation entity that is configured to consume 1 unit per epoch. Information from Mobile OS B is additionally distributed to another entity that is configured to consume the remaining 4 units. As a practical matter, the two logical private computation entities here could be operated by the same organizations, but they would use different configurations. These configurations could be chosen via browser choice of keying material, or directly specified in individual user input.
 
 Secondly, let's address _aggregation minimum threshold_. Suppose that the same _Browser A_ and _Mobile OS B_ have also, respectively, decided that the _aggregation minimum threshold_ should be "X people" and "2X people". Because this is a minimum, when using the API from both, the minimum can be set to 2X, and satisfy both constraints. However, when using data that comes from _Browser A_ only, the minimum could be reduced to X.
 
 ## 4. Private Computation Configurations
 
-Many of these proposals aim to leverage the idea of _private computation_, touched on briefly in the introduction. In it's ideal form, a private computation environment would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. This is commonly used to perform aggregation over inputs which, individually, must not be revealed. It is also often used to then apply differentially private noise to those aggregates.
+Many of these proposals aim to leverage the idea of _private computation_, touched on briefly in the introduction. In it's ideal form, a private computation environment would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. This is commonly used to run a privacy mechanism across user input, which individually must not be revealed.
 
 There are currently two proposed constructions of a private computation environment under consideration: _multi-party computation_ (MPC) and _trusted execution environments_ (TEEs). The following two subsections outline how these can be to create a private computation environment, how they fit into the threat model, and the assumptions required to achieve our goal of assuring that the inputs are not revealed.
 
@@ -319,9 +319,9 @@ There are currently two proposed constructions of a private computation environm
 
 Multi-party computation is a cryptographic protocol in which distinct parties can collectively operate on data which remains oblivious to any individual party throughout the computation, but allows for joint evaluation of a predefined function.
 
-These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1 - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, Shamir's secret sharing uses polynomial interpolation.
+These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1 - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, [Shamir's secret sharing](https://web.mit.edu/6.857/OldStuff/Fall03/ref/Shamir-HowToShareASecret.pdf) uses polynomial interpolation.
 
-In terms of our threat model, MPC uses a helper party network composed of aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a maliciously secure, honest two out of three majority MPC.
+In terms of our threat model, MPC uses a helper party network composed of aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a _maliciously secure_, honest two out of three majority MPC, where the input data remains oblivious even in the fact of an attacker who controls one of the three aggregators and deviates from the protocol. The protocol would always detect this attacker, and typically aborts the computation.
 
 Another security model for MPC is _honest but curious_, where the input data remains oblivious so long as aggregators do not deviate from the protocol. Since we are assuming that an attacker can control some subset of the aggregators, it would be able to deviate from the protocol, and thus the _honest but curious_ is not suitable.
 
@@ -329,19 +329,19 @@ Given these aggregators, a _client/user_ is able to generate a secret sharing of
 
 If the protocol is faithfully executed, the aggregate result can then be reported to the intended recipient without the entities that performed the computation needing to witness the answer.
 
-This threat model does not require that the MPC protocol provide safeguards against an aggregator spoiling the answers from the system. Though a spoiled answer is possible in many protocols, the primary threat that a compromised aggregator presents is to the privacy of _clients/users_. We assume that there is some contractual relationship between those requesting aggregation and the entities that perform that aggregation such that the aggregators lack significant incentive to spoil results.
+This threat model does not require that the MPC protocol provide safeguards against an aggregator spoiling the answers from the system. Though a spoiled answer is possible in many protocols, the primary threat that a compromised aggregator presents is to the privacy of _clients/users_. We assume that there is some relationship between those requesting aggregation and the entities that perform that aggregation such that the aggregators lack significant incentive to spoil results.
 
 ### 4.2 Trusted Execution Environments
 
-Trusted execution environments are specialized hardware where encrypted data can be sent "in" to an enclave where it is decrypted and operated on, but cannot be otherwise accessed. A TEE can produce an "attestation" that acts as a claim - backed by the vendor of the TEE - that only specific code is actively running.
+Trusted execution environments are specialized hardware where encrypted data can be sent "in" to a computing environment where it is decrypted and operated on, but cannot be otherwise accessed. A TEE can produce an "attestation" that acts as a claim - backed by the vendor of the TEE - that only specific code is actively running.
 
-Different hardware manufacturers offer different types of TEEs, and there are various assumptions which need to be made about the manufacturer, hardware operator, and other tenants on the hardware in order to achieve our ideal of input data remaining oblivious. There are documented attacks for many of these types of hardware, and while we don't expect all web platform vendors to support this construction, some vendors have expressed comfort with the required assumptions.
+Different hardware manufacturers offer different types of TEEs, and there are various assumptions which need to be made about the manufacturer, hardware operator, and other tenants on the hardware in order to achieve our ideal of input data remaining oblivious. There are documented attacks for many of these types of hardware, so different vendors will need to make their own choices about which instantiations (if any) to trust.
 
 In order to utilize a TEE to achieve private computation, we need two properties. First, the data must only be able to be decrypted within the TEE, and second, we need to assure that the TEE only executes code which evaluates the predefined function.
 
 The currently proposed system utilizes a helper party network composed of coordinators. This helper party network participate in a key exchange protocol to generate a _threshold key pair_, with a public key for encryption and several partial private keys such that each coordinator has a single partial private key, and all (or a predefined subset) are required for decryption. This allows the _client/user_ to encrypt the data towards the helper party network.
 
-When a TEE is instantiated to perform an aggregation, each coordinator in the helper party network can validate an attestation from the TEE and provide their partial private key if and only if the attestation verifies that the TEE is only running the expected code. Thus, only the TEE is ever able to decrypt the data, so long as the attacker is only able to control a subset of coordinators in the helper party network.
+When a TEE is instantiated to perform an aggregation, each coordinator in the helper party network can validate an attestation from the TEE and provide their partial private key if and only if the attestation verifies that the TEE is only running the expected code. Thus, decrypting data outside the TEE is possible only if the attacker is able to control a proposal specific subset of coordinators in the helper party network.
 
 Note that in [section 1.7. Helper party collusion](#17-Helper-party-collusion), we assume that at least one helper party in a network can be controlled by the attacker, thus requiring at least two coordinators in the helper party network.
 
@@ -351,6 +351,6 @@ Both of these constructions rely on helper party networks, where we assume that 
 
 To make this judgment, web platform vendors are likely to consider various properties about helper party networks such as diversity in ownership of the company/organization operating the helper parties, diversity in cloud provider (if relevant) used by the helper parties, diversity in jurisdictions in which the helper parties, cloud providers, and TEE operators operate, etc. The specific instantiation of private computation will also be a factor in this decision.
 
-Arbitrary helper party networks will not be able to automatically participate in these protocols, as web platform vendors will need to provide some form of authorization. As such, our goal is to reach consensus on a core set of methods and helper party networks so that first/delegated parties can get uniform service across web platform vendors.
+Arbitrary helper party networks will not be able to automatically participate in these protocols, as web platform vendors will need to provide some form of authorization. As such, our goal is to reach consensus on a core set of methods and helper party networks so that first/delegated parties can get uniform service across web platform vendors. This will in turn allow sites/apps to access a basic set of standardized capabilities across all participating platforms.
 
-Beyond this core set of methods and operators, we aim to make these APIs interoperable such that individual web platform vendors may offer increments over that, by authorizing a large set of helper party networks, certain instantiations of private computation, and extended privacy budgets. This would allow first/delegated parties to layer their usage of these APIs, utilizing that core set of methods and helper party networks for uniform service, and layering on incremental service where it's available.
+Beyond this core set of methods and operators, we aim to make these APIs in a way that allows individual web platform vendors to offer increments over that.  This might be by authorizing a large set of helper party networks, alternative instantiations of private computation, or by extending privacy budgets. This would allow first/delegated parties to layer their usage of these APIs, utilizing that core set of methods and helper party networks for uniform service, and layering on incremental service where it's available.
