@@ -113,9 +113,9 @@ See [section 2. First Parties, Embedded Parties and Delegated Parties](#2-First-
 
 Helper parties are a class of party (i.e., companies, organizations) who participate in a protocol in order to instantiate a private computation system. There are currently two types of helper parties proposed, _aggregators_ and _coordinators_. We outline the properties on each type directly (as opposed to on the class itself.)
 
-We define a _helper party network_ as a group of helper parties. We assume that an attacker can control some (proposal specific) subset of the helper parties that participate in helper party network, but that the remaining helper parties act honestly (e.g., they do not collude with other helper parties or any other parties.) Here we outline assets and capabilities in the presence of this attacker.
+We define a _helper party network_ as a group of helper parties. We assume that an attacker can control some (proposal-specific) subset of the helper parties that participate in helper party network, but that the remaining helper parties act honestly (e.g., they do not collude with other helper parties or any other parties.) Here we outline assets and capabilities in the presence of this attacker.
 
-All parties in a helper party network should be known a priori and web platform vendors should be able to evaluate risk of an attacker that is more powerful than our assumption, e.g., the attacker is able to control more than the (protocol specific) subset of helper parties in the network.
+All parties in a helper party network should be known a priori and web platform vendors should be able to evaluate risk of an attacker that is more powerful than our assumption, e.g., the attacker is able to control more than the (proposal-specific) subset of helper parties in the network.
 
 
 ### 1.5. Aggregator Helper Party
@@ -169,7 +169,7 @@ An coordinator is type of helper party which participates in a helper party netw
 
 ### 1.7. Helper party collusion
 
-If enough helper parties collude (beyond the proposal specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
+If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
 
 However, we do assume that an attacker can always control at least one helper party. That is, there can be no perfectly trusted helper parties.
 
@@ -195,7 +195,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 
 #### 1.8.3 Mitigations
 
-1. Helper parties networks should utilize sufficiently distinct cloud providers beyond the proposal specific subset which the attacker is assumed to control.
+1. Helper parties networks should utilize sufficiently distinct cloud providers beyond the proposal-specific subset which the attacker is assumed to control.
 
 
 ### 1.9 Operators of TEEs
@@ -341,7 +341,7 @@ In order to utilize a TEE to achieve private computation, we need two properties
 
 The currently proposed system utilizes a helper party network composed of coordinators. This helper party network participate in a key exchange protocol to generate a _threshold key pair_, with a public key for encryption and several partial private keys such that each coordinator has a single partial private key, and all (or a predefined subset) are required for decryption. This allows the _client/user_ to encrypt the data towards the helper party network.
 
-When a TEE is instantiated to perform an aggregation, each coordinator in the helper party network can validate an attestation from the TEE and provide their partial private key if and only if the attestation verifies that the TEE is only running the expected code. Thus, decrypting data outside the TEE is possible only if the attacker is able to control a proposal specific subset of coordinators in the helper party network.
+When a TEE is instantiated to perform an aggregation, each coordinator in the helper party network can validate an attestation from the TEE and provide their partial private key if and only if the attestation verifies that the TEE is only running the expected code. Thus, decrypting data outside the TEE is possible only if the attacker is able to control a proposal-specific subset of coordinators in the helper party network.
 
 Note that in [section 1.7. Helper party collusion](#17-Helper-party-collusion), we assume that at least one helper party in a network can be controlled by the attacker, thus requiring at least two coordinators in the helper party network.
 
