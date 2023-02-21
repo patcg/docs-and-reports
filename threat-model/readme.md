@@ -216,20 +216,28 @@ TODO
 
 ### 1.10 TEE Manufacturers
 
-TEEs can provide "attestation" which verifies that the TEE is running in the expected state and running the expected code. These attestations are typically produced with an asymmetric key, where the private key is physically embedded into the TEE, and the public key is published via a system similar to a certificate authority.
+The TEE manufacturer is responsible for constructing the physical TEE hardware according to a specification and managing the associated public key infrastructure (PKI).
 
 #### 1.9.1 Assets
 
-1. Private keys embedded in TEEs and their corresponding public keys.
+1. Private keys embedded in TEEs. These mush be confidential and known only to the TEE. 
+2. List of public keys corresponding to valid attestation/identity private keys embedded in TEEs. This list must be correct in that it contains only the public keys corresponding to private keys embedded in the hardware of TEEs that were manufactured according to the desired specification. If this is not the case, then valid attestations may be provided by hardware that does have the expected properties or guarantees. It must also be public so that parties other than the manufacturer are able to recognize valid TEE hardware.
+3. TEE hardware
+4. Specification for TEE design
 
 #### 1.9.2 Capabilities
 
-1. If an attacker controls both the cloud provider and the TEE manufacturer, decrypt all data within the TEE.
+1. Construct TEEs
+2. Embed private attestation/identity keys in TEEs
+3. Maintain PKI for TEEs
 
 
 #### 1.9.2 Mitigations
 
-1. Pick a configuration of TEE manufacturer and cloud operator where it can be assumed that an attacker cannot control both.
+1. Collusion between the TEE manufacturer and TEE operator: not resolvable through technical means. The manufacturer could publish a fake public key such that the corresponding private key is known to the TEE operator, allowing it to provide valid attestations without any of the guarantees of a TEE.
+2. Confidentiality of TEE private keys: The manufacturer should not store private attestation/identity keys beyond what was required to embed them in the TEE hardware. Otherwise, a data breach at the manufacturer would allow impersonation of existing TEEs, compromising authenticity.
+3. PKI: The manufacturer should maintain their TEE PKI according to best practices. In particular they must maintain confidentiality of their root key and provide a mechanism for revocation. Compromise of the root key necessarily compromises authenticity of all associated TEEs.
+4. Construction of TEEs: If a TEE is not constructed according to specification then it may not provide the expected confidentiality, authenticity, and integrity guarantees for computations. This can be somewhat mitigated by open source specifications and independent verification of the TEE hardware.
 
 
 ### 1.11. Attacker on the network
