@@ -198,7 +198,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 1. Helper parties networks should utilize sufficiently distinct cloud providers beyond the proposal-specific subset which the attacker is assumed to control.
 
 
-### 1.9 Operators of TEEs
+### <a id="tee-operators"></a>1.9 Operators of TEEs
 
 Trusted Execution Environments (TEEs) offer hardware supported confidential computing.
 The operator of a TEE is the entity who controls the physical host machine on which this hardware is installed.
