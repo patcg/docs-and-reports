@@ -221,6 +221,7 @@ Most commonly, the operator will be a cloud provider.
 4. Denial of service: ensure that the inputs and outputs of the computation remain confidential so that the operator cannot selectively deny service.
 
 
+<a name="tee-manufacturers"></a>
 ### 1.10 TEE Manufacturers
 
 TEEs can provide "attestation" which verifies that the TEE is running in the expected state and running the expected code. These attestations are typically produced with an asymmetric key, where the private key is physically embedded into the TEE, and the public key is published via a system similar to a certificate authority.
