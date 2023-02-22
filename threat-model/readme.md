@@ -214,25 +214,25 @@ TODO
 TODO
 
 
-### 1.10 TEE Manufacturers
+### <a id="tee-manufacturers"></a>1.11 TEE Manufacturers
 
 The TEE manufacturer is responsible for constructing the physical TEE hardware according to a specification and managing the associated public key infrastructure (PKI).
 
-#### 1.9.1 Assets
+#### 1.11.1 Assets
 
-1. Private keys embedded in TEEs. These mush be confidential and known only to the TEE. 
-2. List of public keys corresponding to valid attestation/identity private keys embedded in TEEs. This list must be correct in that it contains only the public keys corresponding to private keys embedded in the hardware of TEEs that were manufactured according to the desired specification. If this is not the case, then valid attestations may be provided by hardware that does have the expected properties or guarantees. It must also be public so that parties other than the manufacturer are able to recognize valid TEE hardware.
+1. Private keys embedded in TEEs. These must be confidential and known only to the TEE. 
+2. Publicly available mechanism allowing users to discover and recognize valid public keys corresponding to attestation/identity private keys embedded in TEEs. In practice, TEE manufacturers generally use a public key infrastructure (PKI) system for this purpose. It is up to the manufacturer to define validity, but at a minimum such keys must not have been compromised and must belong to TEEs that were constructed correctly according to the specification. If this is not the case, then valid attestations may be provided by [hardware](#tee-hardware) that does have the expected properties or guarantees. Over time, the set of keys that are considered valid may change as keys become compromised, new TEE specifications are developed, or attacks are discovered that disqualify specific TEE specifications.
 3. TEE hardware
 4. Specification for TEE design
 
-#### 1.9.2 Capabilities
+#### 1.11.2 Capabilities
 
 1. Construct TEEs
 2. Embed private attestation/identity keys in TEEs
 3. Maintain PKI for TEEs
 
 
-#### 1.9.2 Mitigations
+#### 1.11.2 Mitigations
 
 1. Collusion between the TEE manufacturer and TEE operator: not resolvable through technical means. The manufacturer could publish a fake public key such that the corresponding private key is known to the TEE operator, allowing it to provide valid attestations without any of the guarantees of a TEE.
 2. Confidentiality of TEE private keys: The manufacturer should not store private attestation/identity keys beyond what was required to embed them in the TEE hardware. Otherwise, a data breach at the manufacturer would allow impersonation of existing TEEs, compromising authenticity.
@@ -240,12 +240,12 @@ The TEE manufacturer is responsible for constructing the physical TEE hardware a
 4. Construction of TEEs: If a TEE is not constructed according to specification then it may not provide the expected confidentiality, authenticity, and integrity guarantees for computations. This can be somewhat mitigated by open source specifications and independent verification of the TEE hardware.
 
 
-### 1.11. Attacker on the network
+### 1.12. Attacker on the network
 
 We assume the existence of attackers on the network links between various parties.
 
 
-#### 1.11.1. Capabilities
+#### 1.12.1. Capabilities
 
 1. Observation of network traffic. Attackers may observe messages exchanged between parties exchanged at the IP layer.
     1. Time of transmission by clients could reveal information about user activity.
@@ -253,7 +253,7 @@ We assume the existence of attackers on the network links between various partie
 3. Tampering with network traffic. Attackers may drop messages or inject new messages into communication between parties.
 
 
-#### 1.11.2. Mitigations
+#### 1.12.2. Mitigations
 
 1. All messages exchanged between parties should be encrypted / use TLS / use HTTPS.
 2. All messages between aggregators and to/from first/third parties should be mutually authenticated to prevent impersonation.
