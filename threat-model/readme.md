@@ -223,21 +223,21 @@ The TEE manufacturer is responsible for constructing the physical TEE hardware a
 1. Private keys embedded in TEEs. These must be confidential and known only to the TEE. 
 2. Publicly available mechanism allowing users to discover and recognize valid public keys corresponding to attestation/identity private keys embedded in TEEs. In practice, TEE manufacturers generally use a public key infrastructure (PKI) system for this purpose. It is up to the manufacturer to define validity, but at a minimum such keys must not have been compromised and must belong to TEEs that were constructed correctly according to the specification. If this is not the case, then valid attestations may be provided by [hardware](#tee-hardware) that does have the expected properties or guarantees. Over time, the set of keys that are considered valid may change as keys become compromised, new TEE specifications are developed, or attacks are discovered that disqualify specific TEE specifications.
 3. TEE hardware
-4. Specification for TEE design
+4. Specification for TEE design. The specification must be for a TEE design that provides the necessary confidentialty and integrity guarantees.
 
 #### 1.11.2 Capabilities
 
 1. Construct TEEs
 2. Embed private attestation/identity keys in TEEs
-3. Maintain PKI for TEEs
+3. Act as authority on which keys are considered valid TEE attestation/identity keys
 
 
 #### 1.11.2 Mitigations
 
 1. Collusion between the TEE manufacturer and TEE operator: not resolvable through technical means. The manufacturer could publish a fake public key such that the corresponding private key is known to the TEE operator, allowing it to provide valid attestations without any of the guarantees of a TEE.
 2. Confidentiality of TEE private keys: The manufacturer should not store private attestation/identity keys beyond what was required to embed them in the TEE hardware. Otherwise, a data breach at the manufacturer would allow impersonation of existing TEEs, compromising authenticity.
-3. PKI: The manufacturer should maintain their TEE PKI according to best practices. In particular they must maintain confidentiality of their root key and provide a mechanism for revocation. Compromise of the root key necessarily compromises authenticity of all associated TEEs.
-4. Construction of TEEs: If a TEE is not constructed according to specification then it may not provide the expected confidentiality, authenticity, and integrity guarantees for computations. This can be somewhat mitigated by open source specifications and independent verification of the TEE hardware.
+3. PKI: In practice, the manufacturer typically manages validity for attestation/identity keys by acting as the authority for a PKI. The manufacturer should maintain their TEE PKI according to best practices. In particular they must maintain confidentiality of their root key and provide a mechanism for revocation. Compromise of the root key necessarily compromises authenticity of all associated TEEs.
+4. Construction and specification of TEEs: If a TEE is not constructed according to specification or the specification is not correct then it may not provide the expected confidentiality, authenticity, and integrity guarantees for computations. This can be somewhat mitigated by open source specifications and independent verification of the TEE hardware.
 
 
 ### 1.12. Attacker on the network
