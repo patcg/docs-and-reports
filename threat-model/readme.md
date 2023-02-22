@@ -209,7 +209,7 @@ Most commonly, the operator will be a cloud provider.
 
 
 #### 1.9.2 Capabilities
-1. The ability to run arbitrary processes on the host machine. TEEs are designed to provide confidentiality and integrity despite this, but, in practice may be vulnerable to side channel leakage via, e.g., the cache or memory access patterns or speculative/transient execution attacks like Spectre. (see Section 1.10 for more on the capabilities of a TEE.)
+1. The ability to run arbitrary processes on the host machine. TEEs are designed to provide confidentiality and integrity despite this, but, in practice may be vulnerable to side channel leakage via, e.g., the cache or memory access patterns or speculative/transient execution attacks like Spectre. (see [below](#tee-manufacturers) for more on the capabilities of a TEE.)
 2. Physical access to the host machine. The operator typically has physical access to the machine that hosts the TEE. Thus, it may attempt to compromise confidentiality via a cold boot attack or side channels using power consumption, acoustics, or temperature.
 3. Ability to deny service by restricting access to the TEE. Denial of service can present an issue if the operator is able  *selectively* restrict operation of the TEE based on the output of its computation. 
 
