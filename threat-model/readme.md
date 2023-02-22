@@ -216,9 +216,10 @@ Most commonly, the operator will be a cloud provider.
 
 #### 1.9.2 Mitigations
 1. Microarchitectural side channel mitigations: microarchitectural side channels arise due to resource sharing between the TEE processes and other processes on the host machine. They can be mitigated by ensuring spatial and temporal isolation of the TEE processes. These mitigations have proven to be challenging in practice and no existing TEE is free of side channel leakage.
-2. Speculative/transient execution mitigations: turn off speculative execution. 
-3. Physical access mitigations: To mitigate cold boot attacks any TEE assets stored off the trusted hardware, e.g. in DRAM, must be encrypted and integrity checked. Defending against power/acoustic/temperature side channels requires preventing the operator from observing these features or by executing TEE processes obliviously (execution is fully independent of the confidential input data).
-4. Denial of service: ensure that the inputs and outputs of the computation remain confidential so that the operator cannot selectively deny service.
+2. Speculative/transient execution mitigations: turn off speculative execution.
+3. Cold Boot Attacks: To mitigate cold boot attacks any TEE assets stored off the trusted hardware, e.g. in DRAM, must be encrypted and integrity checked.
+4. Physical access mitigations: Defending against power/acoustic/temperature side channels requires preventing the operator from observing these features or by executing TEE processes obliviously (execution is fully independent of the confidential input data).
+5. Denial of service: ensure that the inputs and outputs of the computation remain confidential so that the operator cannot selectively deny service.
 
 
 <a name="tee-manufacturers"></a>
