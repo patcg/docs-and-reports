@@ -215,7 +215,7 @@ TODO
 
 ### <a id="tee-hardware"></a>1.10 TEE
 
-TEEs are hardware supported environments for computations that isolate associated processes from other processed on the host machine. TEEs are intended to provide confidentiality, integrity, and authenticity for computations against a possibly malicious operator of the host machine or - in a shared hosting environment - other users of the same host.
+TEEs are hardware supported environments for computations that isolate associated processes from other processed on the host machine. TEEs are intended to provide confidentiality, integrity, and authenticity for computations against a possibly malicious operator of the host machine or, in a shared hosting environment, other users colocated on the same host.
 
 #### 1.10.1 Assets
 
