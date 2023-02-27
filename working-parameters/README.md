@@ -10,7 +10,7 @@ This document serves to capture those parameters (and is intended to be updated 
 # Parameters with Soft Consensus
 
 
-## Server Architecture may exists
+## Server Architecture may exist
 
 The community group has reached soft consensus that the _Private Measurement Technical Specification MVP_ need not be limited to only on-device processing, however there is a very high bar for any server architecture that is included. This included both a high level of security (which the editors will align with the ongoing [Threat Model](https://github.com/patcg/docs-and-reports/tree/main/threat-model) work) as well as ability to explain the privacy and security properties of the system to end users.
 
@@ -18,8 +18,6 @@ The community group has reached soft consensus that the _Private Measurement Tec
 ## Privacy defined by Differential Privacy 
 
 We’ve explored three main definitions of privacy:
-
-
 
 1. Information theoretic
 2. K-anonymity
