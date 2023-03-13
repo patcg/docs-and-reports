@@ -15,7 +15,7 @@ This document serves to capture the dimensions with general agreement from the C
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ may include server processing dependencies, however any server architecture must achieve both a high level of security (which the editors will align with the ongoing [Threat Model](../threat-model) work) as well as ability to explain the privacy and security properties of the system to end users.
 
 
-## Privacy defined by Differential Privacy
+## Privacy defined at least by Differential Privacy
 
 We’ve explored three main definitions of privacy:
 
