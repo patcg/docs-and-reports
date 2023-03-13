@@ -3,6 +3,8 @@
 This document serves to identify critical design dimensions the group is considering while evaluating designs for a privacy measurement API focusing on the high-level attribution measurement use-case.
 Additionally, we analyze a set of key use-cases that differ based on choices made within these dimensions.
 
+[This document tracks the Design Dimensions that have general agreement from the group.](Dimensions-with-General-Agreement.md)
+
 # Glossary
 * ARA: [Attribution Reporting API](https://github.com/wicg/attribution-reporting-api), a measurement proposal from Google, currently in Origin Trials
     * E-ARA: ARA with [event-level reports](https://github.com/WICG/attribution-reporting-api/blob/main/EVENT.md)
