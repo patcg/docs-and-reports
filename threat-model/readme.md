@@ -18,9 +18,9 @@ Private computation can be instantiated using several technologies:
 * A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
 * Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
 
-Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
+Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities (also called helper parties) that can be trusted not to conspire to reveal private inputs. In the sequel, such entities will be referred to as _aggregators_ and _coordinators_ for MPC-based and TEE-based private computations, respectively.
 
-For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
+For our threat model, we assume that an active attacker can control a network of helper parties and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators or collectors, when used.
 
 In the presence of this adversary, APIs should aim to achieve the following goals:
 
@@ -40,9 +40,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.1.1. Assets
 
 1. Original inputs provided to client APIs. Clients expose these APIs to other actors below, which can modify the client’s assets, but should not reveal them.
-2. Unencrypted input shares, for systems which rely on secret sharing among 
-
-ors.
+2. Unencrypted input shares, for systems which rely on secret sharing among aggregators.
 
 
 #### 1.1.2. Capabilities
