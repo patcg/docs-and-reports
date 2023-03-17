@@ -10,7 +10,7 @@ This document is currently a **draft**, submitted to the PATCG (and eventually t
 
 In this document, we outline the security considerations for proposed purpose-constrained APIs for the web platform (that is, within browsers, mobileOSs, and other user-agents) specified by the Private Advertising Technologies Working Group (PATWG).
 
-Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. Private computation can be used to perform aggregation over inputs which, individually, must not be revealed.
+Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a pre-defined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. For instance, private computation could be leveraged to address two main advertising use-cases namely reporting and campaign optimization. Regarding reporting, private computation could be used to perform aggregation over inputs which, individually, must not be revealed. For campaign optimization, private computation could be used to train a machine learning algorithm over those private inputs without revealing them.
 
 Private computation can be instantiated using several technologies:
 
@@ -24,8 +24,8 @@ For our threat model, we assume that an active attacker can control the network 
 
 In the presence of this adversary, APIs should aim to achieve the following goals:
 
-1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
-2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
+1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties receive nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
+2. **Correctness:** Parties receiving the intended result have the guarantee that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
 Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation instantiation provides different options for defense against attacks.  Web platform vendors can decide which configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
@@ -40,7 +40,9 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.1.1. Assets
 
 1. Original inputs provided to client APIs. Clients expose these APIs to other actors below, which can modify the client’s assets, but should not reveal them.
-2. Unencrypted input shares, for systems which rely on secret sharing among aggregators.
+2. Unencrypted input shares, for systems which rely on secret sharing among 
+
+ors.
 
 
 #### 1.1.2. Capabilities
@@ -77,7 +79,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.2.3. Mitigations
 
 1. Modification of client assets should be limited by the API interface to only allow for intended modifications.
-2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent
+2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent [This sentence is not finished]
 
 
 ### 1.3. Delegated Parties (Cross Site/App)
@@ -169,14 +171,15 @@ An coordinator is type of helper party which participates in a helper party netw
 
 ### 1.7. Helper party collusion
 
-If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
+If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat model.
 
 However, we do assume that an attacker can always control at least one helper party. That is, there can be no perfectly trusted helper parties.
 
+### 1.8 On Premise Solutions for Helper Parties
 
 ### 1.8 Cloud Providers for Helper Parties
 
-Helper parties may run either on physical machines owned by directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
+Helper parties may run either on physical machines owned directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
 
 
 #### 1.8.1 Assets
