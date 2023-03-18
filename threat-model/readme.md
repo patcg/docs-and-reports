@@ -25,7 +25,7 @@ For our threat model, we assume that an active attacker can control the network 
 In the presence of this adversary, APIs should aim to achieve the following goals:
 
 1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties receive nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
-2. **Correctness:** Parties receiving the intended result have the guarantee that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
+2. **Correctness:** Parties receiving the intended result trust (within the threat models) that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
 Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation instantiation provides different options for defense against attacks.  Web platform vendors can decide which configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
