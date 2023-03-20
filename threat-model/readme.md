@@ -18,7 +18,7 @@ Private computation can be instantiated using several technologies:
 * A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
 * Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
 
-Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities (also called helper parties) that can be trusted not to conspire to reveal private inputs. Such entities will be referred to as _aggregators_ and _coordinators_ for MPC-based and TEE-based private computations, respectively.
+Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities that can be trusted not to conspire to reveal private inputs. Such entities will be referred to as _aggregators_ and _coordinators_ for MPC-based and TEE-based private computations, respectively.
 
 For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators or collectors, when used.
 
