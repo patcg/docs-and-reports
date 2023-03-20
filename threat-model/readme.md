@@ -77,7 +77,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.2.3. Mitigations
 
 1. Modification of client assets should be limited by the API interface to only allow for intended modifications.
-2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent [This sentence is not finished]
+2. Use of differential privacy (see [Section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to protect the contributions of individual users.
 
 
 ### 1.3. Delegated Parties (Cross Site/App)
