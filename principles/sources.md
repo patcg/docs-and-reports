@@ -6,6 +6,8 @@ Some sources to consider in documenting advertising-specific privacy principles:
 
 [User considerations for private measurement](https://gitlab.com/pitg/private-measurement-user-considerations/-/blob/main/private-measurement-user-considerations.md), some questions/topics regarding private measurement, maintained by Nick Doty
 
+[Advertising Use Cases | User Needs](https://github.com/w3c/web-advertising/blob/main/support_for_advertising_use_cases.md#user-needs-1), from Improving Web Advertising Business Group
+
 ---
 
 Some browser vendors have published policies regarding tracking or privacy models:
