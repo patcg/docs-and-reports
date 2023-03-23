@@ -24,3 +24,13 @@ We’ve explored three main definitions of privacy:
 3. Differential privacy
 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should use a definition of privacy based on differential privacy. This does not preclude the use of other privacy definitions in conjunction with differential privacy, however any proposal should aim to provide differential privacy guarantees.
+
+## Information Release Limits Apply Over Time
+
+Measurement will release information about users to sites they visit.
+
+In order to be useful, measurement systems need to produce a continuous release of information about user activity.
+Measurement systems do not need to provide absolute limits on information release as that would eventually make the information that is provided useless.
+
+Instead, measurement systems must limit the *rate* of information that is released, using a privacy definition appropriate to the design.
+Proposals must also limit the release of information to sites when users do not visit those sites.
