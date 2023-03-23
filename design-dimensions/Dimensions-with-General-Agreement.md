@@ -24,3 +24,9 @@ We’ve explored three main definitions of privacy:
 3. Differential privacy
 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should use a definition of privacy based on differential privacy. This does not preclude the use of other privacy definitions in conjunction with differential privacy, however any proposal should aim to provide differential privacy guarantees.
+
+## Privacy budget scoping
+
+The privacy budget scope denotes a "bucketing" of user information leakage (formally described in terms of the privacy definition) that is exposed in the private measurement designs. Proposals define a particular scope (or scopes), within which a certain amount of information can be disclosed.
+
+The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time / interaction component to the budget scope. That is, as the user browsers the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
