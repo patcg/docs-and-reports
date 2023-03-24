@@ -27,7 +27,7 @@ The community group has reached general agreement that the _Private Measurement 
 
 ## Privacy unit / privacy budget scoping
 
-The privacy budget scope denotes a "bucketing" of user information leakage (formally described in terms of the privacy definition) that is exposed in the private measurement designs. Proposals define a particular scope (or scopes), within which a certain amount of information can be disclosed.
+A privacy budget scope denotes a boundary for user data leakage, formally described in terms of a privacy definition, which is allowed by a private measurement design. Proposals define a scope, or scopes, within which a limited maximum amount of data may be disclosed.
 
 ### Inclusion of a time / interaction dimension
 
