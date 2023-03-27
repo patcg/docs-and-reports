@@ -29,10 +29,10 @@ The community group has reached general agreement that the _Private Measurement 
 
 A privacy budget scope denotes a boundary for user data leakage, formally described in terms of a privacy definition, which is allowed by a private measurement design. Proposals define a scope, or scopes, within which a limited maximum amount of data may be disclosed.
 
-### Inclusion of a time / interaction dimension
+### Inclusion of a time or interaction dimension
 
 In order to be useful, measurement systems need to produce a continuous release of information about user activity. Measurement systems that provide absolute limits on information release would degrade in utility, until at the limit only supporting measurement for brand-new users. Instead, measurement systems must limit the _rate_ of information that is released.
 
-The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time and/or interaction component to the budget scope. That is, as the user browses the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
+The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time or interaction component to the budget scope. That is, as the user browses the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
 
 It is worth noting that, at least among existing differential privacy deployments, a time dimension in the privacy unit is very common. See https://desfontain.es/privacy/real-world-differential-privacy.html for a list of examples here.
