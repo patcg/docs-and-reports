@@ -177,7 +177,7 @@ However, we do assume that an attacker can always control at least one helper pa
 
 ### 1.8 Cloud Providers for Helper Parties
 
-Helper parties may run either on physical machines owned directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
+Helper parties may run either on physical machines owned by directly by the aggregator or subcontract with a cloud provider. In the latter case, we assume that an attacker can control some subset of cloud providers.
 
 
 #### 1.8.1 Assets
@@ -201,7 +201,7 @@ Helper parties may run either on physical machines owned directly by the aggrega
 
 ### 1.9 Operators of TEEs
 
-As a piece of hardware, TEEs will have an operator with access to the machine. Most commonly, this will be a cloud provider. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+As a piece of hardware, TEEs will have an operator with access to the machine. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
 
 #### 1.9.1 Assets
 TODO
@@ -225,12 +225,12 @@ TEEs can provide "attestation" which verifies that the TEE is running in the exp
 
 #### 1.9.2 Capabilities
 
-1. If an attacker controls both the cloud provider and the TEE manufacturer, decrypt all data within the TEE.
+1. If an attacker controls both the TEE operator and the TEE manufacturer, decrypt all data within the TEE.
 
 
 #### 1.9.2 Mitigations
 
-1. Pick a configuration of TEE manufacturer and cloud operator where it can be assumed that an attacker cannot control both.
+1. Pick a configuration of TEE manufacturer and TEE operator where it can be assumed that an attacker cannot control both.
 
 
 ### 1.11. Attacker on the network
