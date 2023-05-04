@@ -25,6 +25,11 @@ We’ve explored three main definitions of privacy:
 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should use a definition of privacy based on differential privacy. This does not preclude the use of other privacy definitions in conjunction with differential privacy, however any proposal should aim to provide differential privacy guarantees.
 
+### Private measurement of single events
+The group has discussed the use-case of “differentially private measurement of single events” i.e. whether, under a differential privacy guarantee, we would permit queries which ask about a single event’s outcome (did impression lead to a conversion, for instance). For more information about this, see https://github.com/patcg/docs-and-reports/issues/41 and the [agenda topic](https://github.com/patcg/meetings/issues/112) from the May 2023 meeting.
+
+We have reached a general consensus that these types of queries can be particularly sensitive, so we must take care when setting the proper [differential privacy scope](#privacy-unit--privacy-budget-scoping) as well as privacy parameters (e.g. epsilon) to ensure that events are properly protected, and we ensure that the protection covers people that submit many events. However, queries of this form can be generally permitted, and we do not require special mitigations to ensure aggregation across many events is happening.
+
 ## Privacy unit / privacy budget scoping
 
 A privacy budget scope denotes a boundary for user data leakage, formally described in terms of a privacy definition, which is allowed by a private measurement design. Proposals define a scope, or scopes, within which a limited maximum amount of data may be disclosed.
