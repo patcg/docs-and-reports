@@ -28,7 +28,7 @@ The community group has reached general agreement that the _Private Measurement 
 ### Private measurement of single events
 The group has discussed the use-case of “differentially private measurement of single events”. Specifically, whether, given differential privacy protections, we would permit queries which ask about the outcome for a single event (did impression lead to a conversion, for instance). For more information about this, see https://github.com/patcg/docs-and-reports/issues/41 and the [agenda topic](https://github.com/patcg/meetings/issues/112) from the May 2023 meeting.
 
-We have reached consensus that these types of queries can be particularly sensitive, so we must take care when setting the proper [differential privacy scope](#privacy-unit--privacy-budget-scoping) and parameters (e.g., epsilon and delta) to ensure that user contributions are adequately protected. Any protection needs to cover people that submit many events. However, queries of this form will not necessarily be prohibited, although additional protections should be considered if differential privacy guarantees are deemed too weak.
+We have reached consensus that these types of queries can be particularly sensitive, so we must take care when setting the proper [differential privacy scope](#privacy-unit--privacy-budget-scoping) and parameters (e.g., epsilon and delta) to ensure that user contributions are adequately protected. Any protection needs to cover people that submit many events within the chosen privacy scope. However, queries of this form will not necessarily be prohibited, although additional protections will be considered if differential privacy guarantees are deemed too weak.
 
 ## Privacy unit / privacy budget scoping
 
