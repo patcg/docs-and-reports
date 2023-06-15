@@ -14,6 +14,10 @@ This document serves to capture the dimensions with general agreement from the C
 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ may include server processing dependencies, however any server architecture must achieve both a high level of security (which the editors will align with the ongoing [Threat Model](../threat-model) work) as well as ability to explain the privacy and security properties of the system to end users.
 
+More generally, the community group is willing to engage with proposals that use different mechanisms to protect data while it being processed on servers, explicitly including both Multi-Party Computation (MPC) and Trusted Execution Environment (TEE) server-side components.  These cannot be treated as "silver bullets", but rather as tools that act as individual components in larger designs, which must in turn mitigate the vulnerabilities of their components.
+
+If the _Private Measurement Technical Specification MVP_ supports both an MPC-based and a TEE-based implementation, then every effort should be made to design them to be cross-compatible, to minimize the engineering burden and maximize utility for API users who choose to engage with both implementations.
+
 
 ## Privacy defined at least by Differential Privacy
 
