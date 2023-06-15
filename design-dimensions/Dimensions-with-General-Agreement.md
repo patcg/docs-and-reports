@@ -41,3 +41,7 @@ In order to be useful, measurement systems need to produce a continuous release 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time or interaction component to the budget scope. That is, as the user browses the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
 
 It is worth noting that, at least among existing differential privacy deployments, a time dimension in the privacy unit is very common. See https://desfontain.es/privacy/real-world-differential-privacy.html for a list of examples here.
+
+## Location of Data Join
+
+The community group has reached general agreement that data join could potentially occur off device within a some type of server side architecture that achieves our desired security goals.
