@@ -41,3 +41,11 @@ In order to be useful, measurement systems need to produce a continuous release 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time or interaction component to the budget scope. That is, as the user browses the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
 
 It is worth noting that, at least among existing differential privacy deployments, a time dimension in the privacy unit is very common. See https://desfontain.es/privacy/real-world-differential-privacy.html for a list of examples here.
+
+## Attribution across environments
+
+Use-cases like cross-device attribution, cross-app-and-web attribution, and others rely on the capability of the system to measure _joined events_ emitted across different computing environments. The group has reached a general agreement that the _Private Measurement Technical Specification MVP_ can support these kinds of data joins in its design. In particular:
+- It may be possible to measure joined events across different applications on a single device
+- It may be possible to measure joined events across applications on different devices, owned or used by the same person
+
+Note: the precise details of _how_ these events are joined and measured needs to be separately agreed upon. The current consensus only documents an agreement that joins across computing environments are not inherently disallowed.
