@@ -48,4 +48,4 @@ Use-cases like cross-device attribution, cross-app-and-web attribution, and othe
 - It may be possible to measure joined events across different applications on a single device
 - It may be possible to measure joined events across applications on different devices, owned or used by the same person
 
-Note: the precise details of _how_ these events are joined and measured needs to be separately agreed upon. The current consensus only documents an agreement that joins across computing environments are not inherently disallowed.
+Note: the precise details of _how_ these events are joined and measured needs to be separately agreed upon. The current consensus documents an agreement that the group is open to designs that support joins across environments.
