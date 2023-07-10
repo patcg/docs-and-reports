@@ -16,7 +16,7 @@ The community group has reached general agreement that the _Private Measurement 
 
 ### Location of Data Join
 
-The community group has reached general agreement that data join could potentially occur off device within a some type of server side architecture.
+Attribution requires joining data from the site of an impression (source) and the site of a conversion (trigger). The community group has reached general agreement that data join could potentially occur off device within a some type of server side architecture.
 This is conditional on having adequate protections for any data that leaves a device, in line with our security and privacy goals.
 
 ## Privacy defined at least by Differential Privacy
