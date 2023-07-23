@@ -41,3 +41,11 @@ In order to be useful, measurement systems need to produce a continuous release 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ should _at least_ include a time or interaction component to the budget scope. That is, as the user browses the web and interacts with sites more, we would expect that the private measurement system will allow more information about that user to be disclosed.
 
 It is worth noting that, at least among existing differential privacy deployments, a time dimension in the privacy unit is very common. See https://desfontain.es/privacy/real-world-differential-privacy.html for a list of examples here.
+
+
+## User Opt-Out
+
+Users must be able to opt out of participation in any measurement activitity.
+
+If a user opts out, then it must be possible for their user agent to hide this fact from sites.
+For example, in an aggregation service, the user agent might provide a zero value to contribute to the aggregate, but this needs to be indistinguishable from a non-zero value.
