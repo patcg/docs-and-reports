@@ -66,3 +66,49 @@
 * github issues
 * PRs on documents
 * biweekly check-in calls?
+
+---
+
+Suggested topics for principles:
+
+continuous release of information over time
+
+whether consent plays into that
+
+collusion and what is trusted
+
+aggregation for measurement
+
+minimize the cross-context data about any user when providing measurement data
+
+limit the ability of sites to perform cross-context recognition
+
+separate the context from the user
+
+privacy definitions (information-theoretic, differential privacy)
+
+
+--
+
+Some notes on how PATCG would like principles documentation to work, from March 2023 meeting:
+
+explain how advertising-related topics may be aligned with user interests, or be an area where a user could have a general preference
+    shivan: shouldn't be a trade-off or discuss that in *this* doc
+    martin: explaining to users and others why we are doing what we are doing
+        why, and how we approached the problem
+
+aram: less privacy principles, and more our principles as a group about how to deal with proposals. like what tradeoffs we can make and why. what makes a healthy web and a functional user experience across the web, how that interacts with how people understand their privacy.
+
+mt: we ultimately want here is for the people working on the document to say "we think that we have identified a principle based on our engagement with $proposal, we'd like to discuss how we refine and capture that principle so that we can apply it to other work in the group"
+
+regular checkin with the patcg, and specific to the technology/specifications under development
+
+where advertising fits into the priority of constituencies
+
+james aylett: state that trade-off or compromise is going to be necessary, but don't make the trade-offs or balance itself because that's specific to a proposal. risk management in individual proposals.
+
+well-lit path to mitigate the demand for covert tracking; make it possible to implement stronger mitigations
+
+charlie: editorial eye towards what belongs or not. maybe collect/save for later topics that could come up but aren't very specific to current proposals in patcg/individual drafts. specific criteria for inclusion.
+
+charlie: diff view or where we want to refine more general TAG principles
