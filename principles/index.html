@@ -55,22 +55,58 @@
   </section>
 
   <section>
-    <h2>Advertising-Specific Principles</h2>
+    <h2>Private Advertising Principles</h2>
+
+    <p>Advertising-specific privacy principles may address the following issues:</p>
+
+    <ul>
+      <li>consent</li>
+      <li>control</li>
+      <li>profiling</li>
+      <li>distress & intrusion</li> 
+      <li>relevance</li>
+      <li>reporting and context</li> 
+      <li>transparency</li>
+      <li>security</li>
+      <li>trust</li>
+      <li>explainability / comprehensibility</li> 
+      <li>competition / consolidation / centralization</li>
+      <li>inferences</li>
+      <li>identifiers</li>
+      <li>accountability</li>
+    </ul>
+
+    <p>Principles are organized in sections below regarding particular use cases or common concepts that apply across different use cases.</p>
+
     <section>
-      <h2>Consent Is Inappropriate</h2>
-      <p>
-        The Privacy Principles leave mention that people can consent to some kinds of data processing, but expresses
-        scepticism that consent is a valid mechanism to protect people's autonomy in a number of sitations.
-      </p>
-      <p>
-        Indeed, when the cross-context sharing of identifiers and of behavioural data is involved, the evidence
-        shows that no consent mechanism will support people in making autonomous choices.
-      </p>
-      <div class="issue">
-        <p>
-          Return to this with greater detail.
+      <h3>Measurement</h3>
+
+      <section>
+        <h4>Measurement should be private for safe, widespread usage, but always be under user control</h4>
+      </section>
+
+      <section>
+        <h4>Opting-out should not be visible</h4>
+        <p>Users may wish to opt-out of participation in measurement, but do so in such a way that is not visible to the sites they visit. Visible opt-out could lead to retaliation against, or coercion of, users who do not wish to participate in measurement.</p>
+      </section>
+
+      <section>
+        <h4>Measurement should not significantly enable cross-context recognition</h4>
+        
+        <p>Protections of differential privacy take the form of guarantees that aggregation or noise make participation in a particular measurement mostly indistinguishable, but also recognize that some information (as often quantified by parameters including epsilon) is released and could be combined with other known information to learn something with some (presumably very small) probability. "significantly" here is not yet detailed. The aggregated or noised measurement should not reasonably be usable to identify a particular user or to link an user's activity to another context.</p>
+
+        <p class="note">
+          Metrics to define significance are being evaluated by a separate task force.
         </p>
-      </div>
+
+        <p>Because measurement and attribution involve all kinds of viewing advertisements and a variety of other actions, in a wide range of different contexts, relying on understanding of, expectations about and consent over cross-context recognition as a result of ad measurement would be inappropriate.</p>
+      </section>
+
+      <section>
+        <h4>Measurement should not significantly enable inferences about individual people</h4>
+
+        <p>Related to cross-context recognition, measurement mechanisms should not reasonably be able to be used to learn or infer information about a particular user, for example, that a user visited a site (or class of site) or took an online or offline action.</p>
+      </section>
     </section>
   </section>
 
