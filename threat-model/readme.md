@@ -201,7 +201,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 
 ### 1.9 Operators of TEEs
 
-As a piece of hardware, TEEs will have an operator with access to the machine. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+As a piece of hardware, TEEs will have an operator with access to the machine. (For example, this might be a cloud provider who offers a confidential computing product.) Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
 
 #### 1.9.1 Assets
 TODO
