@@ -14,6 +14,10 @@ This document serves to capture the dimensions with general agreement from the C
 
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ may include server processing dependencies, however any server architecture must achieve both a high level of security (which the editors will align with the ongoing [Threat Model](../threat-model) work) as well as ability to explain the privacy and security properties of the system to end users.
 
+### Location of Data Join
+
+Attribution requires joining data from the site of an impression (source) and the site of a conversion (trigger). The community group has reached general agreement that data join could potentially occur off device within a some type of server side architecture.
+This is conditional on having adequate protections for any data that leaves a device, in line with our security and privacy goals.
 
 ## Privacy defined at least by Differential Privacy
 
