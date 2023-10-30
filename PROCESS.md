@@ -38,9 +38,9 @@ These are the Document editors:
 
 ### Principles 
 
-@npdoty 
+[@npdoty](https://github.com/npdoty) 
 
 ### Threat Model
 
-@eriktaubeneck 
+[@eriktaubeneck](https://github.com/eriktaubeneck)
 
