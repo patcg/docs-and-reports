@@ -12,6 +12,8 @@ Reports refer to documents that record the concensus and decisions that we reach
 
 Documents refers to documents managed by an editor or an editorial group. It is expected that editorially managed documents will be worked on by the editorial group, managed by one or more editors, and consistently worked on outside of the meetings. Editors can and should merge in changes and contributions from their group as they develop a draft document. Once the document is well developed or comes to a point that the editor judges needs additional review, the editor can bring that Document to the larger community group via an `agenda+` issue on the meetings repository. If there is need to manage the PRs around a document to build an agreement in the editorial group, they can use the `Merge Pending` label to inform editorial group members of PRs that are ready to be merged. We don't expect `call-for-consensus` to be applied to documents as they have a seperate process through their editorial group to author changes. 
 
+Documents should not change their status from to any other state, especially out of Draft, without a consensus check on a community group call. 
+
 ## Using Labels 
 
 Each Report or Document has its own label with the color-code `#BFDADC`. There should only be one Report or Document label on an issue or PR. Each issue or PR should be labled with the Report or Document it corresponds to for clarity and ease of organization. 
