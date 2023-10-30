@@ -29,3 +29,16 @@ Enhancement indicates a need for changes to access or (this) process for this re
 ### Others 
 
 Other labels should be understood via the [label description](https://github.com/patcg/docs-and-reports/labels)https://github.com/patcg/docs-and-reports/labels or are believed to be clear via their name. 
+
+## Editors
+
+These are the Document editors: 
+
+### Principles 
+
+@npdoty 
+
+### Threat Model
+
+@eriktaubeneck 
+
