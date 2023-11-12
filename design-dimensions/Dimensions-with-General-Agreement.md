@@ -60,3 +60,13 @@ Use-cases like cross-device attribution, cross-app-and-web attribution, and othe
 - It may be possible to measure joined events across applications on different devices, owned or used by the same person
 
 Note: the precise details of _how_ these events are joined and measured needs to be separately agreed upon. The current consensus documents an agreement that the group is open to designs that support joins across environments.
+
+## User Opt-Out
+
+Users must be able to opt out of participation in any measurement activitity.
+
+If a user opts out, then it must be possible for their user agent to hide this fact from sites.
+For example, in an aggregation service, the user agent might provide a zero value to contribute to the aggregate, but this needs to be indistinguishable from a non-zero value.
+
+In some designs, an opt-out might not be perfectly indistinguishable, but opt out must be indistinguishable from other normal and commonplace conditions.
+For example, if opt out in measurement results in returning no information in response to a request, then participating users must also regularly return no information for reasons other than opt out.
