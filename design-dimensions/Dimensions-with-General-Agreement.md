@@ -15,6 +15,17 @@ This document serves to capture the dimensions with general agreement from the C
 The community group has reached general agreement that the _Private Measurement Technical Specification MVP_ may include server processing dependencies, however any server architecture must achieve both a high level of security (which the editors will align with the ongoing [Threat Model](../threat-model) work) as well as ability to explain the privacy and security properties of the system to end users.
 
 
+More generally, the community group is willing to engage with proposals that use different mechanisms to protect data while it being processed on servers, explicitly including both Multi-Party Computation (MPC) and Trusted Execution Environment (TEE) server-side components.
+These technologies each have shortcomings, but they can form part of a larger system of protections that includes mitigations for the different vulnerabilities of its constituent components.
+The group could consider both technical and procedural mitigations.
+
+If the _Private Measurement Technical Specification MVP_ supports both an MPC-based and a TEE-based implementation, then every effort should be made to design them to be cross-compatible, to minimize the engineering burden and maximize utility for API users who choose to engage with both implementations.
+
+### Location of Data Join
+
+Attribution requires joining data from the site of an impression (source) and the site of a conversion (trigger). The community group has reached general agreement that data join could potentially occur off device within a some type of server side architecture.
+This is conditional on having adequate protections for any data that leaves a device, in line with our security and privacy goals.
+
 ## Privacy defined at least by Differential Privacy
 
 We’ve explored three main definitions of privacy:
@@ -42,6 +53,13 @@ The community group has reached general agreement that the _Private Measurement 
 
 It is worth noting that, at least among existing differential privacy deployments, a time dimension in the privacy unit is very common. See https://desfontain.es/privacy/real-world-differential-privacy.html for a list of examples here.
 
+## Attribution across environments
+
+Use-cases like cross-device attribution, cross-app-and-web attribution, and others rely on the capability of the system to measure _joined events_ emitted across different computing environments. The group has reached a general agreement that the _Private Measurement Technical Specification MVP_ can support these kinds of data joins in its design. In particular:
+- It may be possible to measure joined events across different applications on a single device
+- It may be possible to measure joined events across applications on different devices, owned or used by the same person
+
+Note: the precise details of _how_ these events are joined and measured needs to be separately agreed upon. The current consensus documents an agreement that the group is open to designs that support joins across environments.
 
 ## User Opt-Out
 
