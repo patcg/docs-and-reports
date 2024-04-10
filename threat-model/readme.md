@@ -3,7 +3,9 @@
 
 ## Document Status
 
-This is a living document which represents the current working threat model for the PATCG (and eventually PATWG.) It has received feedback both on Github and in regular PATCG meetings. Not all issues are resolved, and new issues raised against it are to be expected. However, the document is a fair representation of the threats currently considered for proposals within the PATCG.
+This document represents the current working threat model for the PATCG (and eventually PATWG.) It has received feedback both on Github and in regular PATCG meetings. Not all issues are resolved, and new issues raised against it are to be expected. However, the document is a fair representation of the threats currently considered for proposals within the PATCG.
+
+This document concentrates primarily on security topics. Privacy goals and principles are the subject of [a separate document](https://patcg.github.io/docs-and-reports/principles/).
 
 
 ## Introduction
