@@ -1,9 +1,11 @@
 # Security Considerations
 
 
-## Document Status: DRAFT
+## Document Status
 
-This document is currently a **draft**, submitted to the PATCG (and eventually the PATWG) with the intention of receiving broad feedback. In this state, it does not yet represent any form of consensus in either group, nor should it be seen as a specific endorsement from any contributors. This document will likely evolve significantly through the consensus process.
+This document represents the current working threat model for the PATCG (and eventually PATWG.) It has received feedback both on Github and in regular PATCG meetings. Not all issues are resolved, and new issues raised against it are to be expected. However, the document is a fair representation of the threats currently considered for proposals within the PATCG.
+
+This document concentrates primarily on security topics. Privacy goals and principles are the subject of [a separate document](https://patcg.github.io/docs-and-reports/principles/).
 
 
 ## Introduction
