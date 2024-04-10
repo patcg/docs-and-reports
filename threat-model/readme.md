@@ -12,7 +12,7 @@ This document concentrates primarily on security topics. Privacy goals and princ
 
 In this document, we outline the security considerations for proposed purpose-constrained APIs for the web platform (that is, within browsers, mobileOSs, and other user-agents) specified by the Private Advertising Technologies Working Group (PATWG).
 
-Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. Private computation can be used to perform aggregation over inputs which, individually, must not be revealed.
+Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a pre-defined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. For instance, private computation could be leveraged to address two main advertising use-cases namely reporting and campaign optimization. Regarding reporting, private computation could be used to perform aggregation over inputs which, individually, must not be revealed. For campaign optimization, private computation could be part of a system that trains a machine learning algorithm, without allowing direct access to private information.
 
 Private computation can be instantiated using several technologies:
 
@@ -20,14 +20,14 @@ Private computation can be instantiated using several technologies:
 * A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
 * Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
 
-Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
+Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities that can be trusted not to conspire to reveal private inputs. Such entities will be referred to as _aggregators_ and _coordinators_ for MPC-based and TEE-based private computations, respectively.
 
-For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
+For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators or collectors, when used.
 
 In the presence of this adversary, APIs should aim to achieve the following goals:
 
-1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
-2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
+1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties receive nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
+2. **Correctness:** Parties receiving the intended result trust (within the threat models) that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
 Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation instantiation provides different options for defense against attacks.  Web platform vendors can decide which configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
@@ -79,7 +79,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.2.3. Mitigations
 
 1. Modification of client assets should be limited by the API interface to only allow for intended modifications.
-2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent
+2. Use of differential privacy (see [Section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to protect the contributions of individual users.
 
 
 ### 1.3. Delegated Parties (Cross Site/App)
@@ -171,14 +171,15 @@ An coordinator is type of helper party which participates in a helper party netw
 
 ### 1.7. Helper party collusion
 
-If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
+If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat model.
 
 However, we do assume that an attacker can always control at least one helper party. That is, there can be no perfectly trusted helper parties.
 
+### 1.8 On Premise Solutions for Helper Parties
 
 ### 1.8 Cloud Providers for Helper Parties
 
-Helper parties may run either on physical machines owned by directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
+Helper parties may run either on physical machines owned by directly by the aggregator or subcontract with a cloud provider. In the latter case, we assume that an attacker can control some subset of cloud providers.
 
 
 #### 1.8.1 Assets
@@ -202,7 +203,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 
 ### 1.9 Operators of TEEs
 
-As a piece of hardware, TEEs will have an operator with access to the machine. Most commonly, this will be a cloud provider. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+As a piece of hardware, TEEs will have an operator with access to the machine. (For example, this might be a cloud provider who offers a confidential computing product.) Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
 
 #### 1.9.1 Assets
 TODO
@@ -250,12 +251,12 @@ TEEs can provide "attestation" which verifies that the TEE is running in the exp
 
 #### 1.9.2 Capabilities
 
-1. If an attacker controls both the cloud provider and the TEE manufacturer, decrypt all data within the TEE.
+1. If an attacker controls both the TEE operator and the TEE manufacturer, decrypt all data within the TEE.
 
 
 #### 1.9.2 Mitigations
 
-1. Pick a configuration of TEE manufacturer and cloud operator where it can be assumed that an attacker cannot control both.
+1. Pick a configuration of TEE manufacturer and TEE operator where it can be assumed that an attacker cannot control both.
 
 
 ### 1.11. Attacker on the network
