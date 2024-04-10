@@ -220,7 +220,9 @@ TEEs can provide "attestation" which verifies that the TEE is running in the exp
 
 #### 1.9.1 Assets
 
-1. Private keys embedded in TEEs and their corresponding public keys.
+1. While TEE Manufacturers take measures to prevent the leakage of private keys to themselves, we assume that they may have access to these private keys embedded in the TEEs.
+2. The corresponding public keys for a specific TEE.
+3. The "root" private key used to authenticate the keys used in each TEE.
 
 #### 1.9.2 Capabilities
 
