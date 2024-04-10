@@ -236,7 +236,7 @@ TEEs are hardware supported environments for computations that isolate associate
 3. Confidentiality of computation and its inputs/outputs: guaranteed based on confidentiality of the key(s) associated with the TEE and communication channel and resistance to side channel leakage (the section on [TEE operators](#tee-operators) discusses side channels). Additionally, any TEE assets leaving the TEE, e.g., to DRAM, must be encrypted with a key known only to the TEE.
 4. Authenticity of the computation: guaranteed based on confidentiality of the attestation/identity key.
 
-### 1.10 TEE Manufacturers
+### 1.10.4 TEE Manufacturers
 
 TEEs can provide "attestation" which verifies that the TEE is running in the expected state and running the expected code. These attestations are typically produced with an asymmetric key, where the private key is physically embedded into the TEE, and the public key is published via a system similar to a certificate authority.
 
