@@ -1,16 +1,18 @@
 # Security Considerations
 
 
-## Document Status: DRAFT
+## Document Status
 
-This document is currently a **draft**, submitted to the PATCG (and eventually the PATWG) with the intention of receiving broad feedback. In this state, it does not yet represent any form of consensus in either group, nor should it be seen as a specific endorsement from any contributors. This document will likely evolve significantly through the consensus process.
+This document represents the current working threat model for the PATCG (and eventually PATWG.) It has received feedback both on Github and in regular PATCG meetings. Not all issues are resolved, and new issues raised against it are to be expected. However, the document is a fair representation of the threats currently considered for proposals within the PATCG.
+
+This document concentrates primarily on security topics. Privacy goals and principles are the subject of [a separate document](https://patcg.github.io/docs-and-reports/principles/).
 
 
 ## Introduction
 
 In this document, we outline the security considerations for proposed purpose-constrained APIs for the web platform (that is, within browsers, mobileOSs, and other user-agents) specified by the Private Advertising Technologies Working Group (PATWG).
 
-Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a predefined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. Private computation can be used to perform aggregation over inputs which, individually, must not be revealed.
+Many of these proposals attempt to leverage the concept of _private computation_ as a component of these purpose-constrained APIs. An ideal private computation system would allow for the evaluation of a pre-defined function (i.e., the constrained purpose,) without revealing any new information to any party beyond the output of that predefined function. For instance, private computation could be leveraged to address two main advertising use-cases namely reporting and campaign optimization. Regarding reporting, private computation could be used to perform aggregation over inputs which, individually, must not be revealed. For campaign optimization, private computation could be part of a system that trains a machine learning algorithm, without allowing direct access to private information.
 
 Private computation can be instantiated using several technologies:
 
@@ -18,14 +20,14 @@ Private computation can be instantiated using several technologies:
 * A trusted execution environment (TEE) isolates computation and its state by using specialized hardware.
 * Fully homomorphic encryption (FHE) enables computation on the ciphertext of encrypted inputs.
 
-Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities - or _aggregators_ - that can be trusted not to conspire to reveal private inputs. The forms considered by existing attribution proposals are MPC and TEEs.
+Though the implementation details differ for each technology, ultimately they all rely on finding at least two entities that can be trusted not to conspire to reveal private inputs. Such entities will be referred to as _aggregators_ and _coordinators_ for MPC-based and TEE-based private computations, respectively.
 
-For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators, when used.
+For our threat model, we assume that an active attacker can control the network and has the ability to corrupt any number of clients, the parties who call the proposed APIs, and some subset of aggregators or collectors, when used.
 
 In the presence of this adversary, APIs should aim to achieve the following goals:
 
-1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties learn nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
-2. **Correctness:** Parties receiving the intended result trust that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
+1. **Privacy**: Clients (and, more specifically, the vendors who distribute the clients) trust that (within the threat models), the API is purpose constrained. That is, all parties receive nothing beyond the intended result (e.g., a differentially private aggregation function computed over the client inputs.)
+2. **Correctness:** Parties receiving the intended result trust (within the threat models) that the protocol is executed correctly. Moreover, the amount that a result can be skewed by malicious input is bounded and known.
 
 Specific proposed purpose constrained APIs will provide their own analysis about how they achieve these properties. This threat model does not address aspects that are specific to specific private computation designs or configurations. Each private computation instantiation provides different options for defense against attacks.  Web platform vendors can decide which configurations produce adequate safeguards for their APIs and users. This is explored further in [section 4. Private Computation Configurations](#4-private-computation-configurations).
 
@@ -77,7 +79,7 @@ In this section, we enumerate the potential actors that may participate in a pro
 #### 1.2.3. Mitigations
 
 1. Modification of client assets should be limited by the API interface to only allow for intended modifications.
-2. Use of differential privacy (see [section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to prevent
+2. Use of differential privacy (see [Section 3. Aggregation and Anonymization](#3-Aggregation-and-Anonymization)) should be used to protect the contributions of individual users.
 
 
 ### 1.3. Delegated Parties (Cross Site/App)
@@ -169,14 +171,15 @@ An coordinator is type of helper party which participates in a helper party netw
 
 ### 1.7. Helper party collusion
 
-If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat mode.
+If enough helper parties collude (beyond the proposal-specific subset which an attacker is assumed to control), then none of the properties of the system hold. Such scenarios are outside the threat model.
 
 However, we do assume that an attacker can always control at least one helper party. That is, there can be no perfectly trusted helper parties.
 
+### 1.8 On Premise Solutions for Helper Parties
 
 ### 1.8 Cloud Providers for Helper Parties
 
-Helper parties may run either on physical machines owned by directly by the aggregator or (more commonly) subcontract with a cloud provider. We assume that an attacker can control some subset of cloud providers.
+Helper parties may run either on physical machines owned by directly by the aggregator or subcontract with a cloud provider. In the latter case, we assume that an attacker can control some subset of cloud providers.
 
 
 #### 1.8.1 Assets
@@ -200,7 +203,7 @@ Helper parties may run either on physical machines owned by directly by the aggr
 
 ### 1.9 Operators of TEEs
 
-As a piece of hardware, TEEs will have an operator with access to the machine. Most commonly, this will be a cloud provider. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+As a piece of hardware, TEEs will have an operator with access to the machine. (For example, this might be a cloud provider who offers a confidential computing product.) Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
 
 #### 1.9.1 Assets
 TODO
@@ -213,23 +216,47 @@ TODO
 #### 1.9.2 Mitigations
 TODO
 
+### <a id="tee-hardware"></a>1.10 TEE
 
-### 1.10 TEE Manufacturers
+TEEs are hardware supported environments for computations that isolate associated processes from other processed on the host machine. TEEs are intended to provide confidentiality, integrity, and authenticity for computations against a possibly malicious operator of the host machine or, in a shared hosting environment, other users colocated on the same host.
+
+#### 1.10.1 Assets
+
+1. Private attestation/identity key(s) embedded in TEEs by the manufacturer of the TEE. The TEE must maintain confidentiality for the attestation/identity key(s) in order to maintain authenticity of the TEE. That is, if the confidentiality of attestation/identity key(s) is compromised, then a TEE may be impersonated and not provide the expected guarantees.
+2. The computation to be performed. This computation must be correct in that it produces the expected output on given input data and does not leak any input data outside of the TEE. This computation is part of the trusted code/computing base and the TEE cannot provide confidentiality if a computation directly or indirectly reveals information about its inputs. The TEE is designed to provide integrity for the computation in that it will execute the attested computation as specified. Integrity is based on trust in the manufacturer constructing the TEE hardware according to specification and in integrity checking for any interactions with the host system, e.g., via memory.
+3. Confidential inputs/outputs of the computation. 
+
+#### 1.10.2 Capabilities
+
+1. Generate a signature, or "attestation", on the computation using the private attestation/identity key.
+2. Execute the computation as specified with integrity and confidentiality against other processes and the operator.
+3. Maintain a confidential and integrity checked communication channel between the TEE and the owner of the computation.
+
+#### 1.10.3 Mitigations
+
+1. Confidentiality of attestation/identity key: the TEE's private key(s) should never be accessible from outside the TEE and any operations involving them must be performed obliviously (independently of the key) to avoid leaking bits of the key via side channels.
+2. Integrity of computation: any TEE assets leaving the TEE, e.g., to DRAM, must be integrity checked by the TEE upon return. This includes the initial inputs and final output of the computation over its communication channel with the computation owner.
+3. Confidentiality of computation and its inputs/outputs: guaranteed based on confidentiality of the key(s) associated with the TEE and communication channel and resistance to side channel leakage (the section on [TEE operators](#tee-operators) discusses side channels). Additionally, any TEE assets leaving the TEE, e.g., to DRAM, must be encrypted with a key known only to the TEE.
+4. Authenticity of the computation: guaranteed based on confidentiality of the attestation/identity key.
+
+### 1.10.4 TEE Manufacturers
 
 TEEs can provide "attestation" which verifies that the TEE is running in the expected state and running the expected code. These attestations are typically produced with an asymmetric key, where the private key is physically embedded into the TEE, and the public key is published via a system similar to a certificate authority.
 
 #### 1.9.1 Assets
 
-1. Private keys embedded in TEEs and their corresponding public keys.
+1. While TEE Manufacturers take measures to prevent the leakage of private keys to themselves, we assume that they may have access to these private keys embedded in the TEEs.
+2. The corresponding public keys for a specific TEE.
+3. The "root" private key used to authenticate the keys used in each TEE.
 
 #### 1.9.2 Capabilities
 
-1. If an attacker controls both the cloud provider and the TEE manufacturer, decrypt all data within the TEE.
+1. If an attacker controls both the TEE operator and the TEE manufacturer, decrypt all data within the TEE.
 
 
 #### 1.9.2 Mitigations
 
-1. Pick a configuration of TEE manufacturer and cloud operator where it can be assumed that an attacker cannot control both.
+1. Pick a configuration of TEE manufacturer and TEE operator where it can be assumed that an attacker cannot control both.
 
 
 ### 1.11. Attacker on the network
@@ -319,7 +346,7 @@ There are currently two proposed constructions of a private computation environm
 
 Multi-party computation is a cryptographic protocol in which distinct parties can collectively operate on data which remains oblivious to any individual party throughout the computation, but allows for joint evaluation of a predefined function.
 
-These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1 - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, [Shamir's secret sharing](https://web.mit.edu/6.857/OldStuff/Fall03/ref/Shamir-HowToShareASecret.pdf) uses polynomial interpolation.
+These protocols typically work with data which is _secret shared_. For example, a three way _additive_ secret share of a value v = s<sub>1</sub> + s<sub>2</sub> + s<sub>3</sub> can be constructed by generating two random values for s<sub>1</sub> and s<sub>2</sub>, and then computing s<sub>3</sub> = v - s<sub>1</sub> - s<sub>2</sub>. At this point, each value s<sub>i</sub> individually appears random, and thus v remains oblivious as long as no single entity learns all values of s<sub>i</sub>. A similar secret sharing schemes uses XOR in place of addition; alternatively, [Shamir's secret sharing](https://web.mit.edu/6.857/OldStuff/Fall03/ref/Shamir-HowToShareASecret.pdf) uses polynomial interpolation.
 
 In terms of our threat model, MPC uses a helper party network composed of aggregators and we assume that an attacker can control some subset of those aggregators. That exact threshold may be different for a given proposal, for example, we may assume that an attacker can only control one out of three aggregators. This would enable, in cryptographic terms, a _maliciously secure_, honest two out of three majority MPC, where the input data remains oblivious even in the fact of an attacker who controls one of the three aggregators and deviates from the protocol. The protocol would always detect this attacker, and typically aborts the computation.
 
