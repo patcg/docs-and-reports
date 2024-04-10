@@ -200,21 +200,28 @@ Helper parties may run either on physical machines owned by directly by the aggr
 1. Helper parties networks should utilize sufficiently distinct cloud providers beyond the proposal-specific subset which the attacker is assumed to control.
 
 
-### 1.9 Operators of TEEs
+### <a id="tee-operators"></a>1.9 Operators of TEEs
 
-As a piece of hardware, TEEs will have an operator with access to the machine. Most commonly, this will be a cloud provider. Depending on the specific hardware, there may be known vulnerabilities in which an attacker who only controls the operator can violate the obliviousness of client/user data. These attacks are outside this threat model, but are likely to inform specific web platform decisions about which instantiations of private computation to support.
+Trusted Execution Environments (TEEs) offer hardware supported confidential computing.
+The operator of a TEE is the entity who controls the physical host machine on which this hardware is installed.
+Most commonly, the operator will be a cloud provider. 
 
 #### 1.9.1 Assets
-TODO
+1. The host machine with the TEE hardware installed.
 
 
 #### 1.9.2 Capabilities
-TODO
+1. The ability to run arbitrary processes on the host machine. TEEs are designed to provide confidentiality and integrity despite this, but, in practice may be vulnerable to side channel leakage via, e.g., the cache or memory access patterns or speculative/transient execution attacks like Spectre. (see [below](#tee-manufacturers) for more on the capabilities of a TEE.)
+2. Physical access to the host machine. The operator typically has physical access to the machine that hosts the TEE. Thus, it may attempt to compromise confidentiality via a cold boot attack or side channels using power consumption, acoustics, or temperature.
+3. Ability to deny service by restricting access to the TEE. Denial of service can present an issue if the operator is able  *selectively* restrict operation of the TEE based on the output of its computation. 
 
 
 #### 1.9.2 Mitigations
-TODO
-
+1. Microarchitectural side channel mitigations: microarchitectural side channels arise due to resource sharing between the TEE processes and other processes on the host machine. They can be mitigated by ensuring spatial and temporal isolation of the TEE processes. These mitigations have proven to be challenging in practice and no existing TEE is free of side channel leakage.
+2. Speculative/transient execution mitigations: turn off speculative execution.
+3. Cold Boot Attacks: To mitigate cold boot attacks any TEE assets stored off the trusted hardware, e.g. in DRAM, must be encrypted and integrity checked.
+4. Physical access mitigations: Defending against power/acoustic/temperature side channels requires preventing the operator from observing these features or by executing TEE processes obliviously (execution is fully independent of the confidential input data).
+5. Denial of service: ensure that the inputs and outputs of the computation remain confidential so that the operator cannot selectively deny service.
 
 ### 1.10 TEE Manufacturers
 
