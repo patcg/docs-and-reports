@@ -35,7 +35,7 @@
   <section id="abstract">
     <p>
       Privacy is essential to the sustainable success of the advertising ecosystem. This document takes up the
-      W3C TAG's <em>Privacy Principles</em> [[?Privacy-Principles]] and specialises them for advertising-related
+      W3C TAG's <em>Privacy Principles</em> [[Privacy-Principles]] and specialises them for advertising-related
       situations.
     </p>
   </section>
@@ -92,6 +92,12 @@
 
     <section>
       <h4>Measurement should be private for safe, widespread usage, but always be under user control</h4>
+
+      <p>Measurement and attribution are <a href="https://w3ctag.github.io/privacy-principles/#dfn-ancillary-use">ancillary uses</a> with functionality that may rely on broad usage. (Some forms of measurement are done with smaller, opt-in panels that typically provide identifiable data.) In order to be sufficiently private, measurement should not reveal <a href="https://w3ctag.github.io/privacy-principles/#dfn-data">personal data</a>, by, for example, ensuring measurement data is <a href="https://w3ctag.github.io/privacy-principles/#dfn-controlled-de-identified-data">controlled de-identified data</a>.</p>
+
+      <p>Measurement and attribution involve all kinds of viewing advertisements and a variety of other actions, in a wide range of different contexts. Relying on understanding of, expectations about, or consent over cross-context recognition as a result of ad measurement would be inappropriate.</p>
+
+      <p>Users should always be able to control their participation in measurement systems, even when that participation only produces de-identified data. User agents may, for example, provide a setting for the user's general preference about telemetry and aggregate measurement.</p>
     </section>
 
     <section>
@@ -107,8 +113,6 @@
       <p class="note">
         Metrics to define significance are being evaluated by a separate task force.
       </p>
-
-      <p>Because measurement and attribution involve all kinds of viewing advertisements and a variety of other actions, in a wide range of different contexts, relying on understanding of, expectations about and consent over cross-context recognition as a result of ad measurement would be inappropriate.</p>
     </section>
 
     <section>
